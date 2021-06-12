@@ -3,6 +3,10 @@
 
     $databaseConnection = new Database();
 
-    $databaseConnection->addExam(NULL, 1, 10);
+    $questions = $databaseConnection->fetchAllExamQuestions(1);
+
+    foreach ($questions as &$value) {
+        echo $value->getQuestionType();
+    }
 
 ?>

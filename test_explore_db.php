@@ -1,4 +1,6 @@
 <?php
+require_once('./dto/question.php');
+
 class Database
 {
     const UNVALID_ID = -1;
@@ -110,5 +112,47 @@ class Database
             $this->connection->rollBack();
             echo $e->getMessage();
         }
+    }
+
+    function addQuestion($questionType, $examId)
+    {
+        try {
+            $this->connection->beginTransaction();
+
+            $sql = "INSERT INTO question(question_id, question_type, exam_id) 
+                        VALUES(:questionId, :questionType, :examId)";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute([
+                ':questionId' => NULL, ':questionType' => $questionType, ':examId' => $examId
+            ]);
+
+            $this->connection->commit();
+        } catch (PDOException $e) {
+            $this->connection->rollBack();
+            echo $e->getMessage();
+        }
+    }
+
+    function fetchAllExamQuestions($examId)
+    {
+        $questions = array();
+
+        try {
+            $sql = "SELECT * FROM question WHERE exam_id=:examId";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindParam(":examId", $examId);
+            $stmt->execute();
+
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $questions[] = new Question($row['question_type'], NULL, NULL);
+                //fetching like associative array
+                echo $row['question_id'] . " " . $row['question_type'];
+            }
+        } catch (PDOException $e) {
+            $this->connection->rollBack();
+            echo $e->getMessage();
+        }
+
+        return $questions;
     }
 }
