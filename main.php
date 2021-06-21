@@ -7,6 +7,10 @@
 
     foreach ($questions as &$value) {
         echo $value->getQuestionType();
+        foreach ($value->getAnswers() as &$answer) {
+            echo $answer->getContent();
+            echo $answer->isCorrect();
+        }
     }
 
 ?>

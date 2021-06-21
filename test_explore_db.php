@@ -1,5 +1,6 @@
 <?php
 require_once('./dto/question.php');
+require_once('./dto/answer.php');
 
 class Database
 {
@@ -144,9 +145,8 @@ class Database
             $stmt->execute();
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $questions[] = new Question($row['question_type'], NULL, NULL);
-                //fetching like associative array
-                echo $row['question_id'] . " " . $row['question_type'];
+                $answers = $this->fetchAllQuestionAnswers($row['question_id']);
+                $questions[] = new Question($row['question_type'], $answers);
             }
         } catch (PDOException $e) {
             $this->connection->rollBack();
@@ -154,5 +154,24 @@ class Database
         }
 
         return $questions;
+    }
+
+    function fetchAllQuestionAnswers($questionId)
+    {
+        $answers = array();
+        try {
+            $sql = "SELECT * FROM answer WHERE question_id=:questionId";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindParam(":questionId", $questionId);
+            $stmt->execute();
+
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $answers[] = new Answer($row['content'], $row['is_correct']);
+            }
+        } catch (PDOException $e) {
+            $this->connection->rollBack();
+            echo $e->getMessage();
+        }
+        return $answers;
     }
 }
