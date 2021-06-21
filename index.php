@@ -2,9 +2,9 @@
 
 $requestUrl = $_SERVER['REQUEST_URI'];
 $requestParts = explode('/', rtrim($requestUrl, '/'));
-$controllerName = $requestParts[1] == '' ? "Home" : $requestParts[1];
+$controllerName = count($requestParts) > 1 ? $requestParts[1] : "Home";
 $controllerFileName = "controllers/" . $controllerName . ".php";
-$methodName = $requestParts[2] == '' ? "index" : $requestParts[2];
+$methodName = count($requestParts) > 2 ? $requestParts[2] : "index";
 
 if (!file_exists($controllerFileName)) {
     $controllerName = "CustomError";
