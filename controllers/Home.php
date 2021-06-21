@@ -4,6 +4,13 @@ require_once 'controllers/BaseController.php';
 
 class Home extends BaseController
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+        parent::requestSession();
+    }
+
     public function index()
     {
         $this->view->message = "Hellooooo! This is Index!";
