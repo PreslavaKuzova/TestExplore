@@ -2,20 +2,18 @@
 
 $requestUrl = $_SERVER['REQUEST_URI'];
 $requestParts = explode('/', rtrim($requestUrl, '/'));
-$controllerName = $requestParts[1] == '' ? "Home" : $requestParts[1];
+$controllerName = count($requestParts) > 1 ? ucfirst($requestParts[1]) : "Home";
 $controllerFileName = "controllers/" . $controllerName . ".php";
-$methodName = $requestParts[2] == '' ? "index" : $requestParts[2];
-//$params = $requestParts[3];
+$methodName = count($requestParts) > 2 ? $requestParts[2] : "index";
 
-if (file_exists($controllerFileName)) {
-    require_once $controllerFileName;
-    $controller = new $controllerName;
-    $controller->$methodName();
-} else {
-    require_once "controllers/CustomError.php";
-    $controller = new CustomError();
-    $controller->index();
+if (!file_exists($controllerFileName)) {
+    $controllerName = "CustomError";
+    $controllerFileName = "controllers/" . $controllerName . ".php";
 }
+
+require_once $controllerFileName;
+$controller = new $controllerName;
+$controller->$methodName();
 
 //TODO Check https://github.com/phprouter/main for a better example
 // https://www.youtube.com/watch?v=6HJXR4G_szo&ab_channel=StoyanCheresharov
@@ -35,18 +33,3 @@ if (file_exists($controllerFileName)) {
  * and input handlers (controllers). Nothing in that prescribes the use of classes, routes or anything else.
  *
  */
-
-
-//switch ($requestUrl) {
-//    case '/' :
-//    case '' :
-//        require __DIR__ . '/views/index.php';
-//        break;
-//    case '/about' :
-//        require __DIR__ . '/views/about.php';
-//        break;
-//    default:
-//        http_response_code(404);
-//        require __DIR__ . '/views/404.php';
-//        break;
-//}
