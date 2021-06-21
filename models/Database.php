@@ -67,7 +67,7 @@ class Database
         return $insertedId;
     }
 
-    function addStudent($email, $firstName, $lastName, $password, $level)
+    function addStudent($email, $firstName, $lastName, $password, $level) : ?Student
     {
         $insertedId = $this->addUser($email, $firstName, $lastName, $password);
         if ($insertedId != self::INVALID_ID) {
@@ -79,14 +79,17 @@ class Database
                 $stmt->execute([':studentId' => NULL, ':userId' => $insertedId, ':level' => $level]);
 
                 $this->connection->commit();
+                return new Student($insertedId, $this->connection->lastInsertId(), $email, $firstName, $lastName, $level);
             } catch (PDOException $e) {
                 $this->connection->rollBack();
                 echo $e->getMessage();
+                return null;
             }
         }
+        return null;
     }
 
-    function addTeacher($email, $firstName, $lastName, $password, $department)
+    function addTeacher($email, $firstName, $lastName, $password, $department) : ?Teacher
     {
         $insertedId = $this->addUser($email, $firstName, $lastName, $password);
         if ($insertedId != self::INVALID_ID) {
@@ -98,11 +101,15 @@ class Database
                 $stmt->execute([':teacherId' => NULL, ':userId' => $insertedId, ':department' => $department]);
 
                 $this->connection->commit();
+
+                return new Teacher($insertedId, $this->connection->lastInsertId(), $email, $firstName, $lastName, $department);
             } catch (PDOException $e) {
                 $this->connection->rollBack();
                 echo $e->getMessage();
+                return null;
             }
         }
+        return null;
     }
 
     function addExam($accessCode, $teacherId, $level)

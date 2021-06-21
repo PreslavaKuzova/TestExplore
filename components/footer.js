@@ -41,8 +41,8 @@ footerTemplate.innerHTML = `
     <ul>
     <a href="index.html">Introduction</a>
     <a href="tests.html">Exams</a>
-    <a href="register.html">Register</a>
-    <a href="login.html">Login</a>
+    <a href="/Register">Register</a>
+    <a href="/Login">Login</a>
     </ul>
     <ul class="social-row">
       <li><a href="#"><i class="fab fa-github"></i></a></li>

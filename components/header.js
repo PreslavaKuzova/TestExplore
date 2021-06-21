@@ -27,8 +27,8 @@ headerTemplate.innerHTML = `
         <div class="nav-content">
             <a href="index.html">Introduction</a>
             <a href="tests.html">Exams</a>
-            <a href="register.html">Register</a>
-            <a href="login.html">Login</a>
+            <a href="/Register">Register</a>
+            <a href="/Login">Login</a>
         </dvi>
     </nav>
   </header>
