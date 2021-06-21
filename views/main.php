@@ -1,5 +1,5 @@
 <?php
-    require_once('./test_explore_db.php');
+    require_once('./Database.php');
 
     $databaseConnection = new Database();
 

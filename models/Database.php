@@ -1,5 +1,5 @@
 <?php
-require_once('./dto/question.php');
+require_once('./models/dto/Question.php');
 
 class Database
 {
@@ -154,5 +154,10 @@ class Database
         }
 
         return $questions;
+    }
+
+    function fetchStudent() {
+
+
     }
 }

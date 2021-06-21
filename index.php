@@ -5,7 +5,7 @@ $requestParts = explode('/', rtrim($requestUrl, '/'));
 $controllerName = $requestParts[1];
 $controllerFileName = "controllers/" . $controllerName . ".php";
 $methodName = $requestParts[2];
-$params = $requestParts[3];
+//$params = $requestParts[3];
 
 echo '<pre>';
 print_r($_SERVER);
@@ -15,7 +15,7 @@ if (file_exists($controllerFileName)) {
     require_once $controllerFileName;
     $controller = new $controllerName;
     if($methodName != '') {
-        $controller->$methodName($params);
+        $controller->$methodName();
     } else {
         $controller->index();
     }
