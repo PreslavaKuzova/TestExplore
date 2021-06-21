@@ -6,6 +6,7 @@ require_once('./models/Database.php');
 class Login extends BaseController
 {
 
+    const STUDENT = "student";
     private $databaseConnection;
 
     public function __construct()
@@ -29,9 +30,37 @@ class Login extends BaseController
 
     public function studentLogin()
     {
-        $username = $_POST["student-email"];
-        $password = $_POST["student-password"];
+        $this->initSession("student-email", "student-password", self::STUDENT);
         $this->view->render('views/login/index.phtml');
+    }
+
+    public function initSession($emailIdentifier, $passwordIdentifier, $userIdentifier)
+    {
+        if (isset($_POST[$emailIdentifier]) && isset($_POST[$passwordIdentifier])) {
+            if (!empty($_POST[$emailIdentifier]) && !empty($_POST[$passwordIdentifier])) {
+                $email = htmlentities($_POST[$emailIdentifier], ENT_QUOTES);
+                $password = htmlentities($_POST[$passwordIdentifier], ENT_QUOTES);
+
+                switch ($userIdentifier) {
+                    case self::STUDENT :
+                        $student = $this->databaseConnection->fetchStudent($email, $password);
+                        if ($student != null) {
+                            $_SESSION['logged'] = $email;
+                            $_SESSION['name'] = $student->getFirstName() . " " . $student->getLastName();
+                            $_SESSION['id'] = $student->getUserId();
+                            $_SESSION['email'] = $student->getEmail();
+                        } else {
+                            //TODO handle error message
+                            $this->view->message = "No such student";
+                        };
+                        break;
+                    case "teacher" :
+                        break;
+                }
+            }
+        } else {
+            //TODO show error message
+        }
     }
 
 }

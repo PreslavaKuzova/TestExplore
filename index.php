@@ -2,23 +2,15 @@
 
 $requestUrl = $_SERVER['REQUEST_URI'];
 $requestParts = explode('/', rtrim($requestUrl, '/'));
-$controllerName = $requestParts[1];
+$controllerName = $requestParts[1] == '' ? "Home" : $requestParts[1];
 $controllerFileName = "controllers/" . $controllerName . ".php";
-$methodName = $requestParts[2];
+$methodName = $requestParts[2] == '' ? "index" : $requestParts[2];
 //$params = $requestParts[3];
-
-echo '<pre>';
-print_r($_SERVER);
-echo '</pre>';
 
 if (file_exists($controllerFileName)) {
     require_once $controllerFileName;
     $controller = new $controllerName;
-    if($methodName != '') {
-        $controller->$methodName();
-    } else {
-        $controller->index();
-    }
+    $controller->$methodName();
 } else {
     require_once "controllers/CustomError.php";
     $controller = new CustomError();
