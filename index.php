@@ -7,6 +7,10 @@ $controllerFileName = "controllers/" . $controllerName . ".php";
 $methodName = $requestParts[2];
 $params = $requestParts[3];
 
+echo '<pre>';
+print_r($_SERVER);
+echo '</pre>';
+
 if (file_exists($controllerFileName)) {
     require_once $controllerFileName;
     $controller = new $controllerName;
