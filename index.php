@@ -2,7 +2,7 @@
 
 $requestUrl = $_SERVER['REQUEST_URI'];
 $requestParts = explode('/', rtrim($requestUrl, '/'));
-$controllerName = count($requestParts) > 1 ? $requestParts[1] : "Home";
+$controllerName = count($requestParts) > 1 ? ucfirst($requestParts[1]) : "Home";
 $controllerFileName = "controllers/" . $controllerName . ".php";
 $methodName = count($requestParts) > 2 ? $requestParts[2] : "index";
 
