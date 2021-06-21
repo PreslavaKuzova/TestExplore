@@ -2,6 +2,7 @@
 require_once('./models/dto/Question.php');
 require_once('./models/dto/User.php');
 require_once('./models/dto/Student.php');
+require_once('./models/dto/Teacher.php');
 
 class Database
 {
@@ -12,6 +13,8 @@ class Database
     const USER_ID = "user_id";
     const LEVEL = "level";
     const STUDENT_ID = "student_id";
+    const TEACHER_ID = "teacher_id";
+    const DEPARTMENT = "department";
 
     private $dbtype;
     private $host;
@@ -206,6 +209,33 @@ class Database
                     $student = $stmt->fetch(PDO::FETCH_ASSOC);
                     return new Student($user->getUserId(), $student[self::STUDENT_ID], $user->getEmail(),
                         $user->getFirstName(), $user->getLastName(), $student[self::LEVEL]);
+                }
+            } catch (PDOException $e) {
+                $this->connection->rollBack();
+                echo $e->getMessage();
+            }
+        }
+        return null;
+    }
+
+    function fetchTeacher($email, $password): ?Teacher
+    {
+        $user = $this->fetchUser($email, $password);
+
+        if ($user != null) {
+            try {
+                $userId = $user->getUserId();
+                $sql = "SELECT * FROM teacher WHERE user_id=:userId";
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindParam(":userId", $userId);
+                $stmt->execute();
+
+                if ($stmt->rowCount() != 1) {
+                    return null;
+                } else {
+                    $teacher = $stmt->fetch(PDO::FETCH_ASSOC);
+                    return new Teacher($user->getUserId(), $teacher[self::TEACHER_ID], $user->getEmail(),
+                        $user->getFirstName(), $user->getLastName(), $teacher[self::DEPARTMENT]);
                 }
             } catch (PDOException $e) {
                 $this->connection->rollBack();

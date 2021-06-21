@@ -7,6 +7,7 @@ class Login extends BaseController
 {
 
     const STUDENT = "student";
+    const TEACHER = "teacher";
     private $databaseConnection;
 
     public function __construct()
@@ -23,8 +24,7 @@ class Login extends BaseController
 
     public function teacherLogin()
     {
-        $username = $_POST["teacher-email"];
-        $password = $_POST["teacher-password"];
+        $this->initSession("teacher-email", "teacher-password", self::TEACHER);
         $this->view->render('views/login/index.phtml');
     }
 
@@ -47,14 +47,28 @@ class Login extends BaseController
                         if ($student != null) {
                             $_SESSION['logged'] = $email;
                             $_SESSION['name'] = $student->getFirstName() . " " . $student->getLastName();
-                            $_SESSION['id'] = $student->getUserId();
-                            $_SESSION['email'] = $student->getEmail();
+                            $_SESSION['user_id'] = $student->getUserId();
+                            $_SESSION['student_id'] = $student->getStudentId();
+                            $_SESSION['email'] = $email;
+                            $_SESSION['level'] = $student->getLevel();
                         } else {
                             //TODO handle error message
                             $this->view->message = "No such student";
                         };
                         break;
-                    case "teacher" :
+                    case self::TEACHER :
+                        $teacher = $this->databaseConnection->fetchTeacher($email, $password);
+                        if ($teacher != null) {
+                            $_SESSION['logged'] = $email;
+                            $_SESSION['name'] = $teacher->getFirstName() . " " . $teacher->getLastName();
+                            $_SESSION['user_id'] = $teacher->getUserId();
+                            $_SESSION['teacher_id'] = $teacher->getTeacherId();
+                            $_SESSION['email'] = $email;
+                            $_SESSION['department'] = $teacher->getDepartment();
+                        } else {
+                            //TODO handle error message
+                            $this->view->message = "No such teacher";
+                        };
                         break;
                 }
             }
