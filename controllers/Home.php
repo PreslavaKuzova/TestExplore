@@ -4,7 +4,6 @@ require_once 'controllers/BaseController.php';
 
 class Home extends BaseController
 {
-
     public function index()
     {
         $this->view->message = "Hellooooo! This is Index!";
@@ -18,6 +17,4 @@ class Home extends BaseController
 
         $this->view->render('views/index/index.phtml');
     }
-
-
 }

@@ -1,3 +1,17 @@
+<?php
+session_start();
+if(!(isset($_SESSION['logged'])))
+{
+    header("location:Login");
+}
+else
+{
+    $name = $_SESSION['name'];
+    $email = $_SESSION['email'];
+    $userId = $_SESSION['user_id'];
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
