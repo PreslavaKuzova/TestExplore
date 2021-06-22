@@ -1,10 +1,20 @@
 <?php
-require_once('./dto/question.php');
-require_once('./dto/answer.php');
+require_once('./models/dto/Question.php');
+require_once('./models/dto/User.php');
+require_once('./models/dto/Student.php');
+require_once('./models/dto/Teacher.php');
 
 class Database
 {
-    const UNVALID_ID = -1;
+    const INVALID_ID = -1;
+    const FIRST_NAME = "first_name";
+    const LAST_NAME = "last_name";
+    const EMAIL = "email";
+    const USER_ID = "user_id";
+    const LEVEL = "level";
+    const STUDENT_ID = "student_id";
+    const TEACHER_ID = "teacher_id";
+    const DEPARTMENT = "department";
 
     private $dbtype;
     private $host;
@@ -35,7 +45,7 @@ class Database
 
     function addUser($email, $firstName, $lastName, $password)
     {
-        $insertedId = self::UNVALID_ID;
+        $insertedId = self::INVALID_ID;
         try {
             $this->connection->beginTransaction();
 
@@ -57,10 +67,10 @@ class Database
         return $insertedId;
     }
 
-    function addStudent($email, $firstName, $lastName, $password, $level)
+    function addStudent($email, $firstName, $lastName, $password, $level) : ?Student
     {
         $insertedId = $this->addUser($email, $firstName, $lastName, $password);
-        if ($insertedId != self::UNVALID_ID) {
+        if ($insertedId != self::INVALID_ID) {
             try {
                 $this->connection->beginTransaction();
 
@@ -69,17 +79,20 @@ class Database
                 $stmt->execute([':studentId' => NULL, ':userId' => $insertedId, ':level' => $level]);
 
                 $this->connection->commit();
+                return new Student($insertedId, $this->connection->lastInsertId(), $email, $firstName, $lastName, $level);
             } catch (PDOException $e) {
                 $this->connection->rollBack();
                 echo $e->getMessage();
+                return null;
             }
         }
+        return null;
     }
 
-    function addTeacher($email, $firstName, $lastName, $password, $department)
+    function addTeacher($email, $firstName, $lastName, $password, $department) : ?Teacher
     {
         $insertedId = $this->addUser($email, $firstName, $lastName, $password);
-        if ($insertedId != self::UNVALID_ID) {
+        if ($insertedId != self::INVALID_ID) {
             try {
                 $this->connection->beginTransaction();
 
@@ -88,11 +101,15 @@ class Database
                 $stmt->execute([':teacherId' => NULL, ':userId' => $insertedId, ':department' => $department]);
 
                 $this->connection->commit();
+
+                return new Teacher($insertedId, $this->connection->lastInsertId(), $email, $firstName, $lastName, $department);
             } catch (PDOException $e) {
                 $this->connection->rollBack();
                 echo $e->getMessage();
+                return null;
             }
         }
+        return null;
     }
 
     function addExam($accessCode, $teacherId, $level)
@@ -134,7 +151,7 @@ class Database
         }
     }
 
-    function fetchAllExamQuestions($examId)
+    function fetchAllExamQuestions($examId): array
     {
         $questions = array();
 
@@ -145,8 +162,9 @@ class Database
             $stmt->execute();
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $answers = $this->fetchAllQuestionAnswers($row['question_id']);
-                $questions[] = new Question($row['question_type'], $answers);
+                $questions[] = new Question($row['question_type'], NULL, NULL);
+                //fetching as an associative array
+                echo $row['question_id'] . " " . $row['question_type'];
             }
         } catch (PDOException $e) {
             $this->connection->rollBack();
@@ -156,22 +174,80 @@ class Database
         return $questions;
     }
 
-    function fetchAllQuestionAnswers($questionId)
+    private function fetchUser($email, $password): ?User
     {
-        $answers = array();
         try {
-            $sql = "SELECT * FROM answer WHERE question_id=:questionId";
+            $sql = "SELECT * FROM user WHERE email=:email AND password=:password";
             $stmt = $this->connection->prepare($sql);
-            $stmt->bindParam(":questionId", $questionId);
+            $stmt->bindParam(":email", $email);
+            $stmt->bindParam(":password", $password);
             $stmt->execute();
 
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $answers[] = new Answer($row['content'], $row['is_correct']);
+            if ($stmt->rowCount() != 1) {
+                return null;
+            } else {
+                $user = $stmt->fetch(PDO::FETCH_ASSOC);
+                return new User($user[self::USER_ID], $user[self::EMAIL], $user[self::FIRST_NAME], $user[self::LAST_NAME]);
             }
         } catch (PDOException $e) {
             $this->connection->rollBack();
             echo $e->getMessage();
         }
-        return $answers;
+
+        return null;
+    }
+
+    function fetchStudent($email, $password): ?Student
+    {
+        $user = $this->fetchUser($email, $password);
+
+        if ($user != null) {
+            try {
+                $userId = $user->getUserId();
+                $sql = "SELECT * FROM student WHERE user_id=:userId";
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindParam(":userId", $userId);
+                $stmt->execute();
+
+                if ($stmt->rowCount() != 1) {
+                    return null;
+                } else {
+                    $student = $stmt->fetch(PDO::FETCH_ASSOC);
+                    return new Student($user->getUserId(), $student[self::STUDENT_ID], $user->getEmail(),
+                        $user->getFirstName(), $user->getLastName(), $student[self::LEVEL]);
+                }
+            } catch (PDOException $e) {
+                $this->connection->rollBack();
+                echo $e->getMessage();
+            }
+        }
+        return null;
+    }
+
+    function fetchTeacher($email, $password): ?Teacher
+    {
+        $user = $this->fetchUser($email, $password);
+
+        if ($user != null) {
+            try {
+                $userId = $user->getUserId();
+                $sql = "SELECT * FROM teacher WHERE user_id=:userId";
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindParam(":userId", $userId);
+                $stmt->execute();
+
+                if ($stmt->rowCount() != 1) {
+                    return null;
+                } else {
+                    $teacher = $stmt->fetch(PDO::FETCH_ASSOC);
+                    return new Teacher($user->getUserId(), $teacher[self::TEACHER_ID], $user->getEmail(),
+                        $user->getFirstName(), $user->getLastName(), $teacher[self::DEPARTMENT]);
+                }
+            } catch (PDOException $e) {
+                $this->connection->rollBack();
+                echo $e->getMessage();
+            }
+        }
+        return null;
     }
 }

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+    <link href="components/styles.css" rel="stylesheet" type="text/css" />
+    <script src=<?php echo $this->headerType?> type="text/javascript" defer></script>
+    <script src="components/footer.js" type="text/javascript" defer></script>
+</head>
+<body>
+<header-component></header-component>
+<main>
+    <h1>Welcome to Test Explore, <?php echo $this->username?></h1>
+    <h2>System for creating and taking tests</h2>
+    <div class="row">
+        <div class="column">
+            <img class="icon" src="../../img/accessability.png" alt="test" />
+            <h2>Accessibility</h2>
+            <p>Test Explore is easy to use and no prior training is required.
+                Each student has access to preparatory tests of teachers from all over the country</p>
+        </div>
+        <div class="column">
+            <img class="icon" src="../../img/mark.png" alt="test" />
+            <h2>Automatic evaluation</h2>
+            <p>The tests are graded automatically, allowing students to understand
+                their results immediately after the test</p>
+        </div>
+        <div class="column">
+            <img class="icon" src="../../img/generating.png" alt="test" />
+            <h2>Generating</h2>
+            <p>Test Explore allows easy creation of public and private tests by teachers.
+                They will be generated automatically to be different at each solution</p>
+        </div>
+    </div>
+</main>
+<footer-component></footer-component>
+</body>
+<html>
