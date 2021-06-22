@@ -187,7 +187,6 @@ class Database
                 return null;
             } else {
                 $user = $stmt->fetch(PDO::FETCH_ASSOC);
-                echo $user;
                 return new User($user[self::USER_ID], $user[self::EMAIL], $user[self::FIRST_NAME], $user[self::LAST_NAME]);
             }
         } catch (PDOException $e) {

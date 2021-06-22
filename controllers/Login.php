@@ -18,20 +18,27 @@ class Login extends BaseController
 
     public function index()
     {
+        $this->view->message = "";
         $this->view->render('views/login/index.phtml');   //views/controller_name/action_name
-        $this->databaseConnection = new Database();
     }
 
     public function teacherLogin()
     {
-        $this->initSession("teacher-email", "teacher-password", self::TEACHER);
-        $this->view->render('views/login/index.phtml');
+        $this->login("teacher-email", "teacher-password", self::TEACHER);
     }
 
     public function studentLogin()
     {
-        $this->initSession("student-email", "student-password", self::STUDENT);
-        $this->view->render('views/login/index.phtml');
+        $this->login("student-email", "student-password", self::STUDENT);
+    }
+
+    private function login($emailId, $passId, $userId) {
+        if($this->initSession($emailId, $passId, $userId)) {
+            header("Location:/Home");
+        } else {
+            $this->view->message = "Login failed. Check your credentials and try again";
+            $this->view->render('views/login/index.phtml');
+        }
     }
 
     public function initSession($emailIdentifier, $passwordIdentifier, $userIdentifier)
@@ -40,7 +47,6 @@ class Login extends BaseController
             if (!empty($_POST[$emailIdentifier]) && !empty($_POST[$passwordIdentifier])) {
                 $email = htmlentities($_POST[$emailIdentifier], ENT_QUOTES);
                 $password = htmlentities($_POST[$passwordIdentifier], ENT_QUOTES);
-
                 switch ($userIdentifier) {
                     case self::STUDENT :
                         $student = $this->databaseConnection->fetchStudent($email, $password);
@@ -51,11 +57,10 @@ class Login extends BaseController
                             $_SESSION['student_id'] = $student->getStudentId();
                             $_SESSION['email'] = $email;
                             $_SESSION['level'] = $student->getLevel();
+                            return true;
                         } else {
-                            //TODO handle error message
-                            $this->view->message = "No such student";
-                        };
-                        break;
+                            return false;
+                        }
                     case self::TEACHER :
                         $teacher = $this->databaseConnection->fetchTeacher($email, $password);
                         if ($teacher != null) {
@@ -65,16 +70,14 @@ class Login extends BaseController
                             $_SESSION['teacher_id'] = $teacher->getTeacherId();
                             $_SESSION['email'] = $email;
                             $_SESSION['department'] = $teacher->getDepartment();
+                            return true;
                         } else {
-                            //TODO handle error message
-                            $this->view->message = "No such teacher";
-                        };
-                        break;
+                            return false;
+                        }
                 }
             }
-        } else {
-            //TODO show error message
         }
+        return false;
     }
 
 }

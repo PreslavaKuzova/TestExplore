@@ -12,19 +12,26 @@ class BaseController
     function __construct()
     {
         $this->view = new BaseView();
+        $this->view->headerType = "components/header_guest.js";
+        $this->requestSessionData();
     }
 
-    function requestSession() {
+    function requestSessionData()
+    {
         session_start();
-        if(!(isset($_SESSION['logged'])))
-        {
-            header("location:Login");
-        }
-        else
-        {
+        if ((isset($_SESSION['logged']))) {
             $this->name = $_SESSION['name'];
             $this->email = $_SESSION['email'];
             $this->userId = $_SESSION['user_id'];
         }
+    }
+
+    function hasOngoingSession()
+    {
+        return isset($_SESSION['logged']);
+    }
+
+    function setHeaderType($header) {
+        $this->view->headerType = "components/" . $header . ".js";
     }
 }
