@@ -112,16 +112,16 @@ class Database
         return null;
     }
 
-    function addExam($accessCode, $teacherId, $level)
+    function addExam($name, $accessCode, $teacherId, $level)
     {
         try {
             $this->connection->beginTransaction();
 
-            $sql = "INSERT INTO exam(exam_id, access_code, date_of_creation, teacher_id, level) 
-                        VALUES(:examId, :accessCode, :dateOfCreation, :teacherId, :level)";
+            $sql = "INSERT INTO exam(exam_id, name, access_code, date_of_creation, teacher_id, level) 
+                        VALUES(:examId, :name, :accessCode, :dateOfCreation, :teacherId, :level)";
             $stmt = $this->connection->prepare($sql);
             $stmt->execute([
-                ':examId' => NULL, ':accessCode' => $accessCode, ':dateOfCreation' => date('Y-m-d H:i:s'),
+                ':examId' => NULL, ':name' => $name, ':accessCode' => $accessCode, ':dateOfCreation' => date('Y-m-d H:i:s'),
                 ':teacherId' => $teacherId, ':level' => $level
             ]);
 

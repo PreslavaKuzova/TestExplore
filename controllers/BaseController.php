@@ -32,6 +32,10 @@ class BaseController
         return isset($_SESSION['logged']);
     }
 
+    function isTeacher() {
+        return isset($_SESSION['teacher_id']);
+    }
+
     function setHeaderType($header) {
         $this->view->headerType = "components/" . $header . ".js";
     }

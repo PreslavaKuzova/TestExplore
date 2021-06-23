@@ -1,0 +1,58 @@
+<main>
+    <style>
+        #loader {
+            padding-top: 100px;
+        }
+        table {
+            border: 1px solid gainsboro;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        tr, td, th {
+            border: 1px solid gainsboro;
+            padding: 8px;
+        }
+        th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #04AA6D;
+            color: white;
+        }
+        tr:nth-child(even){background-color: #f2f2f2;}
+        tr:hover {background-color: #ddd;}
+    </style>
+    <!--    <link href="../components/teacher_exams.css" rel="stylesheet" type="text/css" />-->
+    <h3 id="loader"><?php echo $this->message ?></h3>
+    <form name="teacher" action="/TeacherExams/uploadJson" method="post">
+        <input type="submit" value="Upload Json" id="upload-json">
+    </form>
+    <form name="teacher" action="/TeacherExams/downloadJson" method="post">
+        <input type="submit" value="Download All Exams" id="download-json">
+    </form>
+    <form name="teacher" action="/CreateExam" method="post">
+        <input type="submit" value="Create New Exam" id="create-exam">
+    </form>
+
+    <table>
+        <tr>
+            <th>Exam Name</th>
+            <th>Level</th>
+            <th>Access Code</th>
+            <th># of Qs</th>
+            <th>Actions</th>
+        </tr>
+        <?php
+
+        foreach ($this->exams as $exam) {
+            echo "<tr>";
+            echo "<td>" . $exam->getName() . "</td>";
+            echo "<td>" . $exam->getLevel() . "</td>";
+            echo "<td>" . $exam->getAccessCode() . "</td>";
+            echo "<td>" . count($exam->getQuestions()) . "</td>";
+            echo "<td> <form name='edit-exam' action='/CreateExam/edit' method='post'><input type='submit' value='Edit' id='create-exam'></form></td>";
+            echo "</tr>";
+        }
+        ?>
+    </table>
+</main>

@@ -26,7 +26,7 @@ headerTemplate.innerHTML = `
         <a href="/Home"><img href="/Home" src="../img/logo_size_invert.jpg" alt="logo" /></a>
         <div class="nav-content">
             <a href="/Home">Introduction</a>
-            <a href="/TeacherExams">My Exams</a>
+            <a href="/StudentExams">My Exams</a>
             <a href="/Logout">Logout</a>
         </dvi>
     </nav>
