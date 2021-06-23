@@ -12,14 +12,14 @@ class Login extends BaseController
 
     public function __construct()
     {
-        parent::__construct();
+        parent::__construct('views/login.phtml');
         $this->databaseConnection = new Database();
     }
 
     public function index()
     {
         $this->view->message = "";
-        $this->view->render('views/login/index.phtml');   //views/controller_name/action_name
+        $this->render();
     }
 
     public function teacherLogin()
@@ -37,7 +37,7 @@ class Login extends BaseController
             header("Location:/Home");
         } else {
             $this->view->message = "Login failed. Check your credentials and try again";
-            $this->view->render('views/login/index.phtml');
+            $this->render();
         }
     }
 

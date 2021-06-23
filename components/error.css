@@ -1,0 +1,26 @@
+
+.image-container {
+    height: 550px;
+    position: relative;
+}
+
+img {
+    width: 70%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+h1{
+    font-size: 50px;
+    text-align: center;
+    padding-bottom: 20px;
+    color: #02B5FF;
+    font-weight: bold;
+    text-shadow: 2px 2px 1px white;
+}
+
+a{
+    text-decoration: none;
+}

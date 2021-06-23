@@ -16,13 +16,13 @@ class Register extends BaseController
 
     public function __construct()
     {
-        parent::__construct();
+        parent::__construct('views/register.phtml');
         $this->databaseConnection = new Database();
     }
 
     public function index()
     {
-        $this->view->render('views/register/index.phtml');
+        $this->render();
     }
 
     public function studentRegistration()

@@ -1,0 +1,43 @@
+<main>
+    <link href="../components/login.css" rel="stylesheet" type="text/css"/>
+    <div class="container">
+        <h1>Login</h1>
+        <h2><?php echo $this->message ?></h2>
+
+        <div class="row">
+            <div class="vl">
+                <span class="vl-innertext">or</span>
+            </div>
+            <div class="col">
+                <img src="../img/teacher.png" alt="teacher" width="100"/>
+                <form name="teacher" action="/Login/teacherLogin" method="post">
+                    <input type="text" placeholder="Enter teacher email" name="teacher-email" id="teacher-email">
+                    <input type="password" name="teacher-password" placeholder="Enter password" id="teacher-email">
+                    <input type="submit" value="Login" id="teacher-login">
+                </form>
+            </div>
+
+            <div class="col">
+                <img src="../img/student.png" alt="student" width="100"/>
+                <form name="student" action="/Login/studentLogin" method="post">
+                    <input type="text" placeholder="Enter student еmail" name="student-email" id="student-email">
+                    <input type="password" name="student-password" placeholder="Enter password"
+                           id="student-password">
+                    <input type="submit" value="Login" id="student-login">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-container">
+        <div class="row">
+            <div class="col">
+                <a href="../index.php" style="color: #175581" class="btn">Register now</a>
+            </div>
+            <div class="col">
+                <a href="#" style="color:#175581" class="btn">Forgot password?</a>
+            </div>
+        </div>
+    </div>
+
+</main>

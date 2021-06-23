@@ -4,6 +4,10 @@ require_once 'controllers/BaseController.php';
 
 class Home extends BaseController
 {
+    public function __construct()
+    {
+        parent::__construct('views/home.phtml');
+    }
 
     public function index()
     {
@@ -14,13 +18,12 @@ class Home extends BaseController
             $this->view->username = "Guest";
         }
 
-        $this->view->render('views/index/index.phtml');   //views/controller_name/action_name
+        $this->render();
     }
 
     public function doAction($param)
     {
         $this->view->message = "Do action loaded" . $param;
-
-        $this->view->render('views/index/index.phtml');
+        $this->render();
     }
 }

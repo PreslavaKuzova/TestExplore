@@ -1,6 +1,6 @@
 <?php
 
-require_once 'views/BaseView.php';
+require_once 'views/base/BaseView.php';
 
 class BaseController
 {
@@ -9,9 +9,10 @@ class BaseController
     protected $email;
     protected $userId;
 
-    function __construct()
+    function __construct($viewBody)
     {
         $this->view = new BaseView();
+        $this->setViewBody($viewBody);
         $this->view->headerType = "components/header_guest.js";
         $this->requestSessionData();
     }
@@ -33,5 +34,13 @@ class BaseController
 
     function setHeaderType($header) {
         $this->view->headerType = "components/" . $header . ".js";
+    }
+
+    function setViewBody($viewBody) {
+        $this->view->viewBody = $viewBody;
+    }
+
+    function render() {
+        $this->view->render("views/base/base_page.phtml");
     }
 }
