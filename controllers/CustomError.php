@@ -5,10 +5,10 @@ require_once 'controllers/BaseController.php';
 class CustomError extends BaseController
 {
 
-//    public function __construct()
-//    {
-//        parent::__construct();
-//    }
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
     public function index()
     {
