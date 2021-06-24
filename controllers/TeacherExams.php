@@ -23,6 +23,14 @@ class TeacherExams extends BaseController
         $this->render();
     }
 
+    public function uploadJson() {
+
+    }
+
+    public function downloadJson() {
+
+    }
+
     function getUserExams()
     {
         return array(
