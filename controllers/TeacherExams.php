@@ -64,7 +64,7 @@ class TeacherExams extends BaseController
         echo $examsJson;
     }
 
-    #[Pure] function getUserExams(): array
+    function getUserExams(): array
     {
         //TODO replace this with database query
         return array(
