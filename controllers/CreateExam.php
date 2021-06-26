@@ -6,12 +6,11 @@ class CreateExam extends BaseController
 {
     public function __construct()
     {
-        parent::__construct('views/home.phtml');
-        if(parent::hasOngoingSession()) {
-            $this->view->username = $this->name;
+        parent::__construct('views/create_exam.phtml');
+        if(parent::hasOngoingSession() && parent::isTeacher()) {
             $this->setHeaderType("header_logged");
         } else {
-            $this->view->username = "Guest";
+            header("Location:/Home");
         }
     }
 
@@ -23,5 +22,9 @@ class CreateExam extends BaseController
     public function edit()
     {
         $this->render();
+    }
+
+    public function save() {
+
     }
 }

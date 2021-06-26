@@ -1,0 +1,27 @@
+<main>
+    <div class="container">
+        <h1>Exam Details</h1>
+        <p>Enter the details of your exam.</p>
+
+        <form action="/CreateExam/save" method="post" style='width:900px'>
+
+            <label for="exam-name"><b>Exam Name</b></label>
+            <input type="text" placeholder="Enter name of your exam" name="exam-name" id="exam-name" required>
+
+            <label for="access-code"><b>Access code</b></label>
+            <input type="text" placeholder="Leave blank for public exams" name="access-code" id="access-code">
+
+            <label for="exam-level"><b>Exam Level</b></label>
+            <input type="number" placeholder="Enter level of your exam" name="exam-level" id="exam-level" required>
+
+            <div id="questions">
+
+            </div>
+
+            <button id="new-question" class="btn">New Question</button>
+
+            <button type="submit" class="btn">Save</button>
+
+        </form>
+    </div>
+</main>
