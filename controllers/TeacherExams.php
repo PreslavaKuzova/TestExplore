@@ -1,7 +1,5 @@
 <?php
 
-use JetBrains\PhpStorm\Pure;
-
 require_once 'controllers/BaseController.php';
 require_once 'models/dto/Exam.php';
 require_once 'models/dto/ExamCollection.php';
@@ -12,11 +10,6 @@ class TeacherExams extends BaseController
     public function __construct()
     {
         parent::__construct('views/teacher_exams.phtml');
-        if(parent::hasOngoingSession() && parent::isTeacher()) {
-            $this->setHeaderType("header_logged");
-        } else {
-            header("Location:/Home");
-        }
     }
 
     public function index()

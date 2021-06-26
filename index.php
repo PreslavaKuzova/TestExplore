@@ -6,10 +6,6 @@ $controllerName = count($requestParts) > 1 ? ucfirst($requestParts[1]) : "Home";
 $controllerFileName = "controllers/" . $controllerName . ".php";
 $methodName = count($requestParts) > 2 ? $requestParts[2] : "index";
 
-if (!file_exists($controllerFileName)) {
-    $controllerName = "CustomError";
-    $controllerFileName = "controllers/" . $controllerName . ".php";
-}
 
 require_once $controllerFileName;
 $controller = new $controllerName;
