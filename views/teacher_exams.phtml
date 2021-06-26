@@ -1,10 +1,9 @@
 <main>
     <link href="../components/teacher_exams.css" rel="stylesheet" type="text/css" />
     <h3 id="loader"><?php echo $this->message ?></h3>
-    <form name="teacher" action="/uploadJson" method="post">
-        <input type="submit" value="Upload Json" id="upload-json">
-    </form>
-    <form name="teacher" action="/downloadJson" method="post">
+
+    <button id="upload-modal">Upload Exams</button>
+    <form name="teacher" action="TeacherExams/downloadJson" method="post">
         <input type="submit" value="Download All Exams" id="download-json">
     </form>
     <form name="teacher" action="/CreateExam" method="post">
@@ -32,4 +31,39 @@
         }
         ?>
     </table>
+
+    <!-- The Upload Modal -->
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form name="teacher" action="TeacherExams/uploadJson" method="post" enctype="multipart/form-data">
+                Select JSON file to upload:
+                <input type="file" name="fileToUpload" id="fileToUpload">
+                <input type="submit" value="Upload JSON File" name="submit">
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        var modal = document.getElementById("myModal");
+        var btn = document.getElementById("upload-modal");
+        var span = document.getElementsByClassName("close")[0];
+
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 </main>
