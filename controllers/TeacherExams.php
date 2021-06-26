@@ -1,7 +1,10 @@
 <?php
 
+use JetBrains\PhpStorm\Pure;
+
 require_once 'controllers/BaseController.php';
 require_once 'models/dto/Exam.php';
+require_once 'models/dto/ExamCollection.php';
 
 class TeacherExams extends BaseController
 {
@@ -28,10 +31,14 @@ class TeacherExams extends BaseController
     }
 
     public function downloadJson() {
-
+        $examsJson = json_encode(new ExamCollection($this->getUserExams()));
+        $fileName = "allExams" . date("Y-m-d-H-i-s") . ".json";
+        header('Content-disposition: attachment; filename=' . $fileName);
+        header('Content-type: application/json');
+        echo $examsJson;
     }
 
-    function getUserExams()
+    #[Pure] function getUserExams(): array
     {
         return array(
             new Exam("Mathematics Exam #1", "RFRT", "2021-06-28 17:44", "5", "TeacherName", array(3)),
