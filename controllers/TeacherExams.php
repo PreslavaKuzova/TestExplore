@@ -49,6 +49,7 @@ class TeacherExams extends BaseController
             fclose($myFile);
 
             $exams = json_decode($jsonContent);
+            //TODO replace this with database insert
             foreach ($exams->exams as $exam) {
                 echo $exam->name . " " . $exam->accessCode . "<br>";
             }
@@ -65,6 +66,7 @@ class TeacherExams extends BaseController
 
     #[Pure] function getUserExams(): array
     {
+        //TODO replace this with database query
         return array(
             new Exam("Mathematics Exam #1", "RFRT", "2021-06-28 17:44", "5", "TeacherName", array(3)),
             new Exam("Physics Exam #1", "RFRT", "2021-06-28 17:44", "6", "TeacherName", array(2)),
