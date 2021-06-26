@@ -62,7 +62,7 @@ class Login extends BaseController
                             return false;
                         }
                     case self::TEACHER :
-                        $teacher = $this->databaseConnection->fetchTeacher($email, $password);
+                        $teacher = $this->databaseConnection->fetchTeacherByEmailAndPassword($email, $password);
                         if ($teacher != null) {
                             $_SESSION['logged'] = $email;
                             $_SESSION['name'] = $teacher->getFirstName() . " " . $teacher->getLastName();
