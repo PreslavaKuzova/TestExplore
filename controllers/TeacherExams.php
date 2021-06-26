@@ -27,7 +27,32 @@ class TeacherExams extends BaseController
     }
 
     public function uploadJson() {
+        $uploadOk = 1;
+        $fileName = basename($_FILES["fileToUpload"]["name"]);
+        $fileSize = basename($_FILES["fileToUpload"]["size"]);
+        $filePath = $_FILES["fileToUpload"]["tmp_name"];
+        $fileType = strtolower(pathinfo($fileName,PATHINFO_EXTENSION));
 
+        if ($fileSize > 5000) {
+            echo "Sorry, your file is too large.";
+            $uploadOk = 0;
+        }
+
+        if($fileType != "json") {
+            echo "Sorry, only JSON files are allowed.";
+            $uploadOk = 0;
+        }
+
+        if($uploadOk == 1) {
+            $myFile = fopen($filePath, "r") or die("Unable to open file!");
+            $jsonContent = fread($myFile,filesize($filePath));
+            fclose($myFile);
+
+            $exams = json_decode($jsonContent);
+            foreach ($exams->exams as $exam) {
+                echo $exam->name . " " . $exam->accessCode . "<br>";
+            }
+        }
     }
 
     public function downloadJson() {
