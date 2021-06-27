@@ -23,7 +23,8 @@ class StudentExams extends BaseController
 
     public function filterExams()
     {
-        $this->view->exams = $this->databaseConnection->fetchAllFilteredExams($this->getAllSelectedSubjectFilters());
+        $exams = $this->getAllFilteredBySubjectExams();
+        $this->view->exams = $this->sortDependingOnSortByFilter($exams);
         $this->render();
     }
 
@@ -40,11 +41,49 @@ class StudentExams extends BaseController
         return $subjects;
     }
 
-    private function getAllSelectedSortByFilters(): array
+    public function getAllFilteredBySubjectExams(): array
     {
-        $filters = array();
+        $filters = $this->getAllSelectedSubjectFilters();
 
-        return $filters;
+        if (empty($filters)) {
+            $exams = $this->databaseConnection->fetchAllExams();
+        } else {
+            $exams = $this->databaseConnection->fetchAllFilteredExams($filters);
+        }
+        return $exams;
     }
 
+    private function sortDependingOnSortByFilter($exams): array
+    {
+        if (isset($_POST['sort-control'])) {
+            $choice = $_POST['sort-control'];
+            if ($choice == 1) {
+                //Date of creation [Oldest to Newest]
+                usort($exams, function ($exam1, $exam2) {
+                    return ($exam1->getDateOfCreation() > $exam2->getDateOfCreation());
+                });
+            } elseif ($choice == 2) {
+                //Date of creation [Newest to Oldest]
+                usort($exams, function ($exam1, $exam2) {
+                    return ($exam1->getDateOfCreation() < $exam2->getDateOfCreation());
+                });
+            } elseif ($choice == 3) {
+                //Teacher name
+                usort($exams, function ($exam1, $exam2) {
+                    return strcmp($exam1->getTeacher()->getFullName(), $exam2->getTeacher()->getFullName());
+                });
+            } elseif ($choice == 4) {
+                //Level [Ascending order]
+                usort($exams, function ($exam1, $exam2) {
+                    return ($exam1->getLevel() > $exam2->getLevel());
+                });
+            } elseif ($choice == 5) {
+                //Level [Descending order]
+                usort($exams, function ($exam1, $exam2) {
+                    return ($exam1->getLevel() < $exam2->getLevel());
+                });
+            }
+        }
+        return $exams;
+    }
 }
