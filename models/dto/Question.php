@@ -28,4 +28,9 @@ class Question
     {
         return $this->answers;
     }
+
+    public function getQuestionContent()
+    {
+        return $this->questionContent;
+    }
 }

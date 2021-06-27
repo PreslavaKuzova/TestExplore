@@ -1,0 +1,75 @@
+<main>
+    <link href="../components/create_exam.css" rel="stylesheet" type="text/css"/>
+    <div class="container">
+        <h1>Exam Details</h1>
+        <p>Enter the details of your exam.</p>
+
+        <form action="/CreateExam/save" method="post" style='width:900px'>
+
+            <label for="exam-name"><b>Exam Name</b></label>
+            <input type="text" placeholder="Enter name of your exam" name="exam-name" id="exam-name" required>
+
+            <label for="access-code"><b>Access code</b></label>
+            <input type="text" placeholder="Leave blank for public exams" name="access-code" id="access-code">
+
+            <label for="exam-level"><b>Exam Level</b></label>
+            <input type="number" placeholder="Enter level of your exam" name="exam-level" id="exam-level" required>
+
+            <div id="questions">
+
+            </div>
+
+            <button type="button" id="new-question" class="btn">New Question</button>
+
+            <button type="submit" class="btn">Save</button>
+
+        </form>
+    </div>
+
+    <script>
+
+        var questionCount = 0;
+        window.onload = function() {
+            var newQuestionButton = document.getElementById("new-question");
+
+            newQuestionButton.onclick = function() {
+                addQuestion();
+            }
+            addQuestion();
+        }
+
+        function addQuestion() {
+            var questionsContainer = document.getElementById("questions");
+            var answerCount = 1;
+            fetch('views/question_view.html')
+                .then(response => response.text())
+                .then((data) => {
+                    questionCount += 1;
+                    var paramData = data.replaceAll("{QID}", questionCount)
+                    questionsContainer.innerHTML += paramData;
+                    document.getElementById("add-answer-" + questionCount).onclick = function () {
+                        addAnswer(questionCount, answerCount);
+                        answerCount++;
+                    }
+                    addAnswer(questionCount, answerCount);
+                    answerCount++;
+                    addAnswer(questionCount, answerCount);
+                    answerCount++;
+                })
+        }
+
+        function addAnswer(questionCount, answerCount) {
+            var answersContainer = document.getElementById("answers-"+questionCount);
+            fetch('views/answer_view.html')
+                .then(response => response.text())
+                .then((data) => {
+                    var paramData = data.replaceAll("{QID}", questionCount)
+                    paramData = paramData.replaceAll("{AID}", answerCount)
+                    answersContainer.innerHTML += paramData;
+                    document.getElementById("remove-answer-" + questionCount + "-" + answerCount).onclick = function () {
+                        document.getElementById("answer-container-" + questionCount + "-" + answerCount).remove();
+                    }
+                })
+        }
+    </script>
+</main>
