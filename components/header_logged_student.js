@@ -28,7 +28,7 @@ headerTemplate.innerHTML = `
             <a href="/Home">Introduction</a>
             <a href="/StudentExams">My Exams</a>
             <a href="/Logout">Logout</a>
-        </dvi>
+        </div>
     </nav>
   </header>
 `;

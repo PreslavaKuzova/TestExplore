@@ -1,6 +1,5 @@
 <?php
 
-
 class Teacher extends User
 {
     private $teacherId;
@@ -22,6 +21,11 @@ class Teacher extends User
     public function getDepartment()
     {
         return $this->department;
+    }
+
+    public function getFullName()
+    {
+        return parent::getFirstName() . " " . parent::getLastName();
     }
 
 }
