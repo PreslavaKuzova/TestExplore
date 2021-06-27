@@ -1,28 +1,7 @@
 <main>
     <link href="../components/student_exams.css" rel="stylesheet" type="text/css"/>
 
-    <table>
-        <tr>
-            <th>Exam Name</th>
-            <th>Level</th>
-            <th>Access Code</th>
-            <th>Teacher</th>
-        </tr>
-        <?php
-
-        foreach ($this->exams as $exam) {
-            echo "<tr>";
-            echo "<td>" . $exam->getName() . "</td>";
-            echo "<td>" . $exam->getLevel() . "</td>";
-            echo "<td>" . $exam->getAccessCode() . "</td>";
-            echo "<td>" . $exam->getTeacher()->getFullName() . "</td>";
-            echo "</tr>";
-        }
-        ?>
-    </table>
-
-    <aside id="filters">
-        <h1 class="bigHead">FILTER EXAMS</h1>
+    <aside id="filters" style="float:left">
         <form name="filter" action="/StudentExams/filterExams" method="post">
             <div id="type">
                 <h1>TYPE</h1>
@@ -55,7 +34,7 @@
                 </div>
             </div>
             <div class="sortBy">
-                <h1>SORT BY:</h1>
+                <h1>SORT BY</h1>
                 <select class="sort-control" name="sort-control" id="sort-control">
                     <option value="0" selected disabled hidden>Choose sorting options</option>
                     <option value="1">Date of creation [Oldest to Newest]</option>
@@ -68,5 +47,25 @@
             <input type="submit" value="Apply filters" id="filter-button">
         </form>
     </aside>
+
+    <table>
+        <tr>
+            <th>Exam Name</th>
+            <th>Level</th>
+            <th>Access Code</th>
+            <th>Teacher</th>
+        </tr>
+        <?php
+
+        foreach ($this->exams as $exam) {
+            echo "<tr>";
+            echo "<td>" . $exam->getName() . "</td>";
+            echo "<td>" . $exam->getLevel() . "</td>";
+            echo "<td>" . $exam->getAccessCode() . "</td>";
+            echo "<td>" . $exam->getTeacher()->getFullName() . "</td>";
+            echo "</tr>";
+        }
+        ?>
+    </table>
 
 </main>

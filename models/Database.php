@@ -24,7 +24,9 @@ class Database
     private $dbname;
     private $connection;
 
-    function __construct($dbtype = "mysql", $host = "localhost", $username = "root", $pass = "", $dbname = "test_explore")
+    private static $instance = null;
+
+    private function __construct($dbtype = "mysql", $host = "localhost", $username = "root", $pass = "", $dbname = "test_explore")
     {
         $this->dbtype = $dbtype;
         $this->host = $host;
@@ -42,6 +44,15 @@ class Database
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
+    }
+
+    public static function getInstance(): ?Database
+    {
+        if (self::$instance == null) {
+            self::$instance = new Database();
+        }
+
+        return self::$instance;
     }
 
     function addUser($email, $firstName, $lastName, $password)
@@ -317,5 +328,6 @@ class Database
 
         return $this->fetchTeacherFromUser($user);
     }
+
 
 }

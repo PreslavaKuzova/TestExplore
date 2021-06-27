@@ -17,7 +17,7 @@ class Register extends BaseController
     public function __construct()
     {
         parent::__construct('views/register.phtml');
-        $this->databaseConnection = new Database();
+        $this->databaseConnection = Database::getInstance();
     }
 
     public function index()

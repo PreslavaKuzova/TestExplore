@@ -13,7 +13,7 @@ class Login extends BaseController
     public function __construct()
     {
         parent::__construct('views/login.phtml');
-        $this->databaseConnection = new Database();
+        $this->databaseConnection = Database::getInstance();
     }
 
     public function index()

@@ -11,7 +11,7 @@ class StudentExams extends BaseController
     public function __construct()
     {
         parent::__construct('views/student_exams.phtml');
-        $this->databaseConnection = new Database();
+        $this->databaseConnection = Database::getInstance();
     }
 
     public function index()
