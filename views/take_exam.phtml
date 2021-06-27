@@ -1,0 +1,17 @@
+<main>
+    <link href="../components/create_exam.css" rel="stylesheet" type="text/css"/>
+    <div class="container">
+        <h1><?php echo $this->examName ?></h1>
+        <h3><?php echo $this->examDate ?></h3>
+
+        <form action="/TakeExam/submit" method="post" style='width:900px'>
+            <input type="hidden" value=<?php echo $this->examId ?> name="exam_id" />
+            <div id="questions">
+                <?php echo $this->examQuestions ?>
+            </div>
+
+            <button type="submit" class="btn">Submit</button>
+
+        </form>
+    </div>
+</main>
