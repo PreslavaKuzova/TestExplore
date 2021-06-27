@@ -153,7 +153,7 @@ class Database
                         VALUES(:questionId, :questionContent, :questionType, :examId)";
             $stmt = $this->connection->prepare($sql);
             $stmt->execute([
-                ':questionId' => NULL, ':content' => $questionContent,':questionType' => $questionType, ':examId' => $examId
+                ':questionId' => NULL, ':content' => $questionContent, ':questionType' => $questionType, ':examId' => $examId
             ]);
 
             $this->connection->commit();
@@ -193,7 +193,7 @@ class Database
             $stmt->execute();
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $teacher = $this->fetchTeacherById($row['teacher_id']);
+                $teacher = $this->fetchTeacherByTeacherId($row['teacher_id']);
                 $questions = $this->fetchAllExamQuestions($row['exam_id']);
                 $exams[] = new Exam($row['exam_id'], $teacher->getDepartment() . ' Exam',
                     $row['access_code'], $row['date_of_creation'], $row['level'], $teacher, $questions);
@@ -204,6 +204,21 @@ class Database
         }
 
         return $exams;
+    }
+
+    function fetchAllFilteredExams($subjectFilters): array
+    {
+        $filteredExams = array();
+
+        foreach ($this->fetchAllExams() as &$exam) {
+            foreach ($subjectFilters as &$subject) {
+                if (strcmp($exam->getTeacher()->getDepartment(), $subject) == 0) {
+                    $filteredExams[] = $exam;
+                }
+            }
+        }
+
+        return $filteredExams;
     }
 
     private function fetchUser($email, $password): ?User
@@ -291,6 +306,7 @@ class Database
      * @param $userId
      * @return Teacher|null
      */
+
     public function fetchTeacherFromUser(?User $user): ?Teacher
     {
         if ($user != null) {
@@ -316,10 +332,28 @@ class Database
         return null;
     }
 
-    function fetchTeacherById($userId): ?Teacher
+    private function fetchTeacherByTeacherId($teacherId): ?Teacher
     {
-        $user = $this->fetchUserById($userId);
-        return $this->fetchTeacherFromUser($user);
+        try {
+            $sql = "SELECT * FROM teacher WHERE teacher_id=:teacherId";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindParam(":teacherId", $teacherId);
+            $stmt->execute();
+
+            if ($stmt->rowCount() != 1) {
+                return null;
+            } else {
+                $teacher = $stmt->fetch(PDO::FETCH_ASSOC);
+                $user = $this->fetchUserById($teacher[self::USER_ID]);
+                return new Teacher($user->getUserId(), $teacher[self::TEACHER_ID], $user->getEmail(),
+                    $user->getFirstName(), $user->getLastName(), $teacher[self::DEPARTMENT]);
+            }
+        } catch (PDOException $e) {
+            $this->connection->rollBack();
+            echo $e->getMessage();
+        }
+
+        return null;
     }
 
     function fetchTeacherByEmailAndPassword($email, $password): ?Teacher
@@ -328,6 +362,5 @@ class Database
 
         return $this->fetchTeacherFromUser($user);
     }
-
 
 }
