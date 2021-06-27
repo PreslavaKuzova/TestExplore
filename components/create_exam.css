@@ -1,0 +1,18 @@
+.question {
+    background-color: #cccccc;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.answers {
+    background-color: #fefefe;
+    padding: 10px;
+}
+
+.answer {
+    margin-bottom: 20px;
+    border-style: solid;
+    border-color: #175581;
+    border-width: 1px;
+    padding: 10px;
+}
