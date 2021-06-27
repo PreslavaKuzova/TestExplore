@@ -22,7 +22,7 @@ class BaseController
                 $this->setHeaderType("header_logged_teacher");
             }
         } else {
-            $this->view->headerType = "components/header_guest.js";
+            $this->setHeaderType("header_guest");
         }
     }
 
@@ -51,9 +51,9 @@ class BaseController
         return isset($_SESSION['teacher_id']);
     }
 
-    function setHeaderType($header)
+    private function setHeaderType($header)
     {
-        $this->view->headerType = "components/" . $header . ".js";
+        $this->view->headerType = "/components/" . $header . ".js";
     }
 
     function setViewBody($viewBody)
