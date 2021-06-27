@@ -10,11 +10,6 @@ class TakeExam extends BaseController
     public function __construct()
     {
         parent::__construct('views/take_exam.phtml');
-        if (parent::hasOngoingSession()) { //TODO add student check
-            $this->setHeaderType("header_logged_student");
-        } else {
-            header("Location:/Home");
-        }
     }
 
     public function index()
@@ -42,14 +37,14 @@ class TakeExam extends BaseController
     private function getExam($examId)
     {
         //TODO Replace with database call
-        return new Exam("Test Exam of Mathematics", "", "2021-05-10", "5", "1", array(
-            new Question("What is a*b?", "multiple", array(new Answer("Rectangle", true), new Answer("Square", false))),
-            new Question("What is pi?", "multiple", array(new Answer("3.14", true), new Answer("22/7", false), new Answer("a circle", false), new Answer("yummmy", true))),
-            new Question("Which is bigger: 2 on power of 3 or 3 on the power of 2?", "multiple", array(new Answer("2^3", false), new Answer("3 ^ 2", false), new Answer("yo mamma", true), new Answer("they are equal", false))),
-            new Question("What is a*b?", "multiple", array(new Answer("Rectangle", true), new Answer("Square", false))),
-            new Question("What is a*b?", "multiple", array(new Answer("Rectangle", true), new Answer("Square", false))),
-            new Question("What is a*b?", "multiple", array(new Answer("Rectangle", true), new Answer("Square", false))),
-            new Question("What is a*b?", "multiple", array(new Answer("Rectangle", true), new Answer("Square", false))),
+        return new Exam("-1", "Test Exam of Mathematics", "", "2021-05-10", "5", "1", array(
+            new Question("1", "What is a*b?", "multiple", array(new Answer("Rectangle", true), new Answer("Square", false))),
+            new Question("2","What is pi?", "multiple", array(new Answer("3.14", true), new Answer("22/7", false), new Answer("a circle", false), new Answer("yummmy", true))),
+            new Question("3","Which is bigger: 2 on power of 3 or 3 on the power of 2?", "multiple", array(new Answer("2^3", false), new Answer("3 ^ 2", false), new Answer("yo mamma", true), new Answer("they are equal", false))),
+            new Question("4","What is a*b?", "multiple", array(new Answer("Rectangle", true), new Answer("Square", false))),
+            new Question("5","What is a*b?", "multiple", array(new Answer("Rectangle", true), new Answer("Square", false))),
+            new Question("6","What is a*b?", "multiple", array(new Answer("Rectangle", true), new Answer("Square", false))),
+            new Question("7","What is a*b?", "multiple", array(new Answer("Rectangle", true), new Answer("Square", false))),
         ));
     }
 
