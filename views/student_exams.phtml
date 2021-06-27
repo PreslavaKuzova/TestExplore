@@ -20,4 +20,53 @@
         }
         ?>
     </table>
+
+    <aside id="filters">
+        <h1 class="bigHead">FILTER EXAMS</h1>
+        <form name="filter" action="/StudentExams/filterExams" method="post">
+            <div id="type">
+                <h1>TYPE</h1>
+                <div class="bump">
+                    <div class="box1">
+                        <input type="checkbox" id="literature" name="literature" value="Literature">
+                        <label for="literature" class="check-box"></label>
+                        <h4>Literature</h4>
+                    </div>
+                    <div class="box1">
+                        <input type="checkbox" id="mathematics" name="mathematics" value="Mathematics">
+                        <label for="mathematics" class="check-box"></label>
+                        <h4>Mathematics</h4>
+                    </div>
+                    <div class="box1">
+                        <input type="checkbox" id="geography" name="geography" value="Geography">
+                        <label for="geography" class="check-box"></label>
+                        <h4>Geography</h4>
+                    </div>
+                    <div class="box1">
+                        <input type="checkbox" id="history" name="history" value="History">
+                        <label for="history" class="check-box"></label>
+                        <h4>History</h4>
+                    </div>
+                    <div class="box1">
+                        <input type="checkbox" id="science" name="science" value="Science">
+                        <label for="science" class="check-box"></label>
+                        <h4>Science</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="sortBy">
+                <h1>SORT BY:</h1>
+                <select class="sort-control" name="sort-control" id="sort-control">
+                    <option value="0" selected disabled hidden>Choose sorting options</option>
+                    <option value="1">Date of creation [Oldest to Newest]</option>
+                    <option value="2">Date of creation [Newest to Oldest]</option>
+                    <option value="3">Teacher name [A to Z]</option>
+                    <option value="4">Level [Аscending order]</option>
+                    <option value="5">Level [Descending order]</option>
+                </select>
+            </div>
+            <input type="submit" value="Apply filters" id="filter-button">
+        </form>
+    </aside>
+
 </main>

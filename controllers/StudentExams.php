@@ -20,4 +20,13 @@ class StudentExams extends BaseController
         $this->render();
     }
 
+    public function filterExams() {
+        if (isset($_POST['mathematics'])) {
+            echo $_POST['mathematics'];
+        }
+        if(isset($_POST['sort-control'])) {
+            echo $_POST['sort-control'];
+        }
+    }
+
 }
