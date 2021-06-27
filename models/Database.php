@@ -144,16 +144,16 @@ class Database
         }
     }
 
-    function addQuestion($questionType, $examId)
+    function addQuestion($questionContent, $questionType, $examId)
     {
         try {
             $this->connection->beginTransaction();
 
-            $sql = "INSERT INTO question(question_id, question_type, exam_id) 
-                        VALUES(:questionId, :questionType, :examId)";
+            $sql = "INSERT INTO question(question_id, content, question_type, exam_id) 
+                        VALUES(:questionId, :questionContent, :questionType, :examId)";
             $stmt = $this->connection->prepare($sql);
             $stmt->execute([
-                ':questionId' => NULL, ':questionType' => $questionType, ':examId' => $examId
+                ':questionId' => NULL, ':content' => $questionContent,':questionType' => $questionType, ':examId' => $examId
             ]);
 
             $this->connection->commit();
@@ -174,7 +174,7 @@ class Database
             $stmt->execute();
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $questions[] = new Question($row['question_id'], $row['question_type'], NULL);
+                $questions[] = new Question($row['question_id'], $row['content'], $row['question_type'], NULL);
             }
         } catch (PDOException $e) {
             $this->connection->rollBack();
