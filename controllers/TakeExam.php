@@ -26,14 +26,11 @@ class TakeExam extends BaseController
 
     public function submit()
     {
-        echo '<pre>';
-        print_r($_POST);
-        echo '</pre>';
-
-        $examId = -1; //$_POST["exam-id"]; //TODO Make a check if exists
+        $examId = $_POST["exam-id"];
         $exam = $this->getExam($examId);
         $userScore = ExamResultCalculator::calculateResult($exam, $_POST);
-        echo "Your score is " . $userScore;
+        //TODO Save attempt in database
+        header('Location: /AttemptDetails/index/' . $examId . '&' . 123); //TODO set attemptId
     }
 
     private function getExam($examId)

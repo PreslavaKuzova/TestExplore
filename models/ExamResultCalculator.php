@@ -25,6 +25,6 @@ class ExamResultCalculator
             $userCorrectAnswers = $userCorrectAnswers < 0 ? 0 : $userCorrectAnswers;
             $totalScore = $totalScore + (($userCorrectAnswers * self::POINTS_PER_QUESTION) / $maxCorrectAnswers);
         }
-        return $totalScore;
+        return $totalScore / (count($exam->questions) * self::POINTS_PER_QUESTION);
     }
 }
