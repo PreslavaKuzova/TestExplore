@@ -2,6 +2,7 @@
 
 require_once 'controllers/BaseController.php';
 require_once('./models/Database.php');
+require_once('./models/dto/Department.php');
 
 class StudentExams extends BaseController
 {
@@ -20,13 +21,30 @@ class StudentExams extends BaseController
         $this->render();
     }
 
-    public function filterExams() {
-        if (isset($_POST['mathematics'])) {
-            echo $_POST['mathematics'];
+    public function filterExams()
+    {
+        $this->view->exams = $this->databaseConnection->fetchAllFilteredExams($this->getAllSelectedSubjectFilters());
+        $this->render();
+    }
+
+    private function getAllSelectedSubjectFilters(): array
+    {
+        $subjects = array();
+
+        foreach (Department::getInstance()->getDepartments() as &$department) {
+            if (isset($_POST[$department])) {
+                $subjects[] = $department;
+            }
         }
-        if(isset($_POST['sort-control'])) {
-            echo $_POST['sort-control'];
-        }
+
+        return $subjects;
+    }
+
+    private function getAllSelectedSortByFilters(): array
+    {
+        $filters = array();
+
+        return $filters;
     }
 
 }
