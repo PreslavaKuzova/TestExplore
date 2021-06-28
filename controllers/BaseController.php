@@ -4,7 +4,6 @@ require_once 'views/base/BaseView.php';
 
 class BaseController
 {
-
     protected $name;
     protected $email;
     protected $userId;
@@ -13,8 +12,18 @@ class BaseController
     {
         $this->view = new BaseView();
         $this->setViewBody($viewBody);
-        $this->view->headerType = "components/header_guest.js";
+
         $this->requestSessionData();
+
+        if ($this->hasOngoingSession()) {
+            if ($this->isStudent()) {
+                $this->setHeaderType("header_logged_student");
+            } else if ($this->isTeacher()) {
+                $this->setHeaderType("header_logged_teacher");
+            }
+        } else {
+            $this->setHeaderType("header_guest");
+        }
     }
 
     function requestSessionData()
@@ -32,19 +41,28 @@ class BaseController
         return isset($_SESSION['logged']);
     }
 
-    function isTeacher() {
+    function isStudent()
+    {
+        return isset($_SESSION['student_id']);
+    }
+
+    function isTeacher()
+    {
         return isset($_SESSION['teacher_id']);
     }
 
-    function setHeaderType($header) {
-        $this->view->headerType = "components/" . $header . ".js";
+    private function setHeaderType($header)
+    {
+        $this->view->headerType = "/components/" . $header . ".js";
     }
 
-    function setViewBody($viewBody) {
+    function setViewBody($viewBody)
+    {
         $this->view->viewBody = $viewBody;
     }
 
-    function render() {
+    function render()
+    {
         $this->view->render("views/base/base_page.phtml");
     }
 }
