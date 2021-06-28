@@ -1,24 +1,38 @@
 <main>
     <link href="../components/teacher_exams.css" rel="stylesheet" type="text/css" />
     <h3 id="loader"><?php echo $this->message ?></h3>
-    <form name="teacher" action="/uploadJson" method="post">
-        <input type="submit" value="Upload Json" id="upload-json">
-    </form>
-    <form name="teacher" action="/downloadJson" method="post">
-        <input type="submit" value="Download All Exams" id="download-json">
-    </form>
-    <form name="teacher" action="/CreateExam" method="post">
-        <input type="submit" value="Create New Exam" id="create-exam">
-    </form>
 
-    <table>
-        <tr>
-            <th>Exam Name</th>
-            <th>Level</th>
-            <th>Access Code</th>
-            <th># of Qs</th>
-            <th>Actions</th>
-        </tr>
+    <div class="float-container">
+
+        <div class="float-first-child">
+            <img src="../img/teacher.png" alt="teacher" width="100"/>
+            <form class="teacher-function-container" name="teacher" action="/uploadJson" method="post">
+                <input class="teacher-function" type="submit" value="Upload Json" id="upload-json">
+            </form>
+            <form class="teacher-function-container" name="teacher" action="/downloadJson" method="post">
+                <input class="teacher-function" type="submit" value="Download All Exams" id="download-json">
+            </form>
+            <form class="teacher-function-container" name="teacher" action="/CreateExam" method="post">
+                <input class="teacher-function" type="submit" value="Create New Exam" id="create-exam">
+            </form>
+        </div>
+
+        <div class="float-second-child">
+            <h1>Available Exams</h1>
+            <table>
+                <tr>
+                    <th>Exam Name</th>
+                    <th>Level</th>
+                    <th>Access Code</th>
+                    <th># of Qs</th>
+                    <th>Actions</th>
+                </tr>
+        </div>
+
+    </div>
+
+
+
         <?php
 
         foreach ($this->exams as $exam) {
@@ -27,7 +41,7 @@
             echo "<td>" . $exam->getLevel() . "</td>";
             echo "<td>" . $exam->getAccessCode() . "</td>";
             echo "<td>" . count($exam->getQuestions()) . "</td>";
-            echo "<td> <form name='edit-exam' action='/CreateExam/edit' method='post'><input type='submit' value='Edit' id='create-exam'></form></td>";
+            echo "<td> <form class='edit-button' name='edit-exam' action='/CreateExam/edit' method='post'><input class='edit-button-input' type='submit' value='Edit' id='create-exam'></form></td>";
             echo "</tr>";
         }
         ?>
