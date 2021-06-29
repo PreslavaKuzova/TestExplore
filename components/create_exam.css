@@ -1,5 +1,9 @@
+*{
+    background-color:  rgb(234, 244, 255);
+}
+
 .question {
-    background-color: #cccccc;
+    background-color: #B3DAFE;
     padding: 20px;
     margin-bottom: 20px;
 }
@@ -15,4 +19,9 @@
     border-color: #175581;
     border-width: 1px;
     padding: 10px;
+}
+
+.title{
+    padding-bottom: 20px;
+    padding-top: 20px;
 }
