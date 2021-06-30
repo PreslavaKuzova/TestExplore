@@ -70,7 +70,11 @@
             echo "<td>" . $exam->getAccessCode() . "</td>";
             echo "<td>" . $exam->getDateOfCreation() . "</td>";
             echo "<td>" . $exam->getTeacher()->getFullName() . "</td>";
-            echo "<td> <form class='start-button' name='edit-exam' action='/TakeExam/getexam' method='post'><input class='start-button-input' type='submit' value='Start' id='take-exam'></form></td>";
+            echo "<td> <form class='start-button' name='edit-exam' action='/TakeExam/' method='post'>
+                            <input type='hidden' value=" . $exam->id . " name='exam-id'>
+                            <input class='start-button-input' type='submit' value='Start' id='take-exam'>
+                       </form>
+                  </td>";
             echo "</tr>";
         }
         ?>

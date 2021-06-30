@@ -14,7 +14,7 @@ class TakeExam extends BaseController
 
     public function index()
     {
-        $examId = -1; //$_POST["exam-id"]; //TODO Make a check if exists
+        $examId = $_POST["exam-id"];
         $exam = $this->getExam($examId);
         $this->view->examId = $examId;
         $this->view->examName = $exam->getName();
@@ -29,7 +29,7 @@ class TakeExam extends BaseController
         print_r($_POST);
         echo '</pre>';
 
-        $examId = -1; //$_POST["exam-id"]; //TODO Make a check if exists
+        $examId = $_POST["exam-id"];
         $exam = $this->getExam($examId);
         
     }
