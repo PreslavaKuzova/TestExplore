@@ -1,4 +1,5 @@
 <?php
+
 class Question
 {
     //FIXME The fields are public in order for the json_encode to be able to read them.
@@ -6,13 +7,15 @@ class Question
     public $questionId;
     public $questionContent;
     public $questionType;
+    public $examId;
     public $answers;
 
-    function __construct($questionId, $questionContent, $questionType, $answers)
+    function __construct($questionId, $questionContent, $questionType, $examId, $answers)
     {
         $this->questionId = $questionId;
         $this->questionContent = $questionContent;
         $this->questionType = $questionType;
+        $this->examId = $examId;
         $this->answers = $answers;
     }
 

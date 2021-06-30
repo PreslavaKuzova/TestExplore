@@ -22,7 +22,7 @@ class Register extends BaseController
 
     public function index()
     {
-        $this->render();
+        $this->updateContent("");
     }
 
     public function studentRegistration()
@@ -34,15 +34,37 @@ class Register extends BaseController
                 $student = $this->databaseConnection->addStudent($_POST[self::EMAIL], $_POST[self::FIRST_NAME], $_POST[self::LAST_NAME],
                     $_POST[self::PASSWORD], $_POST[self::GRADE]);
                 if ($student != null) {
-                    //TODO redirect to the home screen and init a session
+                    if ($this->initSession($student)) {
+                        header("Location:/Home");
+                    } else {
+                        $this->updateContent("Something went wrong. We couldn't create an account. Please try again.");
+                    }
                 } else {
-                    //TODO show error message for creating user account
+                    $this->updateContent("Something went wrong. We couldn't create an account. Please try again.");
                 }
             } else {
-                //TODO error message to handle different passwords
+                $this->updateContent("Passwords don't match.");
             }
         }
     }
 
+    public function initSession($student)
+    {
+        if (!empty($_POST[self::EMAIL]) && !empty($_POST[self::PASSWORD]) && !empty($_POST[self::PASSWORD_REPEAT])) {
+            $_SESSION['logged'] = $student->getEmail();
+            $_SESSION['name'] = $student->getFirstName() . " " . $student->getLastName();
+            $_SESSION['user_id'] = $student->getUserId();
+            $_SESSION['student_id'] = $student->getStudentId();
+            $_SESSION['email'] = $student->getEmail();
+            $_SESSION['level'] = $student->getLevel();
+            return true;
+        }
+        return false;
+    }
 
+    private function updateContent($message): void
+    {
+        $this->view->message = $message;
+        $this->render();
+    }
 }
