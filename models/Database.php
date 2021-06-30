@@ -15,8 +15,20 @@ class Database
     const USER_ID = "user_id";
     const LEVEL = "level";
     const STUDENT_ID = "student_id";
-    const TEACHER_ID = "teacher_id";
     const DEPARTMENT = "department";
+    const QUESTION_ID = 'question_id';
+    const CONTENT = 'content';
+    const QUESTION_TYPE = 'question_type';
+    const EXAM_ID = 'exam_id';
+    const ANSWER_ID = 'answer_id';
+    const IS_CORRECT = 'is_correct';
+    const TEACHER_ID = 'teacher_id';
+    const ACCESS_CODE = 'access_code';
+    const DATE_OF_CREATION = 'date_of_creation';
+    const EXAM_LEVEL = 'exam_level';
+    const ATTEMPT_ID = "attempt_id";
+    const TIMESTAMP = "timestamp";
+    const RESULT_PERCENTAGE = "result_percentage";
 
     private $dbtype;
     private $host;
@@ -211,6 +223,29 @@ class Database
         }
     }
 
+    function addAttempt($studentId, $examId, $resultPercentage) {
+        $insertedId = self::INVALID_ID;
+        try {
+            $this->connection->beginTransaction();
+
+            $sql = "INSERT INTO attempt(attempt_id, student_id, exam_id, result_percentage)  
+                        VALUES(:attemptId, :studentId, :examId, :percentage)";
+            $stmt = $this->connection->prepare($sql);
+            if ($stmt->execute([
+                ':attemptId' => NULL, ':studentId' => $studentId, ':examId' => $examId, ':percentage' => $resultPercentage
+            ])) {
+                $insertedId = $this->connection->lastInsertId();
+            };
+
+            $this->connection->commit();
+        } catch (PDOException $e) {
+            $this->connection->rollBack();
+            echo $e->getMessage();
+            return $insertedId;
+        }
+        return $insertedId;
+    }
+
     function fetchAllExamQuestions($examId): array
     {
         $questions = array();
@@ -222,8 +257,8 @@ class Database
             $stmt->execute();
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $answers = $this->fetchAllQuestionsAnswers($row['question_id']);
-                $questions[] = new Question($row['question_id'], $row['content'], $row['question_type'], $row['exam_id'],
+                $answers = $this->fetchAllQuestionsAnswers($row[self::QUESTION_ID]);
+                $questions[] = new Question($row[self::QUESTION_ID], $row[self::CONTENT], $row[self::QUESTION_TYPE], $row[self::EXAM_ID],
                     $answers);
             }
         } catch (PDOException $e) {
@@ -245,7 +280,7 @@ class Database
             $stmt->execute();
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $answers[] = new Answer($row['answer_id'], $row['content'], $row['is_correct']);
+                $answers[] = new Answer($row[self::ANSWER_ID], $row[self::CONTENT], $row[self::IS_CORRECT]);
             }
         } catch (PDOException $e) {
             $this->connection->rollBack();
@@ -264,10 +299,10 @@ class Database
             $stmt->execute();
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $teacher = $this->fetchTeacherByTeacherId($row['teacher_id']);
-                $questions = $this->fetchAllExamQuestions($row['exam_id']);
-                $exams[] = new Exam($row['exam_id'], $teacher->getDepartment() . ' Exam',
-                    $row['access_code'], $row['date_of_creation'], $row['exam_level'], $teacher, $questions);
+                $teacher = $this->fetchTeacherByTeacherId($row[self::TEACHER_ID]);
+                $questions = $this->fetchAllExamQuestions($row[self::EXAM_ID]);
+                $exams[] = new Exam($row[self::EXAM_ID], $teacher->getDepartment() . ' Exam',
+                    $row[self::ACCESS_CODE], $row[self::DATE_OF_CREATION], $row[self::EXAM_LEVEL], $teacher, $questions);
             }
         } catch (PDOException $e) {
             $this->connection->rollBack();
@@ -275,6 +310,31 @@ class Database
         }
 
         return $exams;
+    }
+
+    function fetchExamById($examId): ?Exam
+    {
+        try {
+            $sql = "SELECT * FROM exam WHERE exam_id=:examId";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindParam(":examId", $examId);
+            $stmt->execute();
+
+            if ($stmt->rowCount() != 1) {
+                return null;
+            } else {
+                $exam = $stmt->fetch(PDO::FETCH_ASSOC);
+                $teacher = $this->fetchTeacherByTeacherId($exam[self::TEACHER_ID]);
+                $questions = $this->fetchAllExamQuestions($exam[self::EXAM_ID]);
+                return new Exam($exam[self::EXAM_ID], $teacher->getDepartment() . ' Exam',
+                    $exam[self::ACCESS_CODE], $exam[self::DATE_OF_CREATION], $exam[self::EXAM_LEVEL], $teacher, $questions);
+            }
+        } catch (PDOException $e) {
+            $this->connection->rollBack();
+            echo $e->getMessage();
+        }
+
+        return null;
     }
 
     function fetchAllFilteredExams($subjectFilters): array
@@ -303,10 +363,10 @@ class Database
             $stmt->execute();
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $questions = $this->fetchAllExamQuestions($row['exam_id']);
-                $teacher = $this->fetchTeacherByTeacherId($row['teacher_id']);
-                $exams[] = new Exam($row['exam_id'], $teacher->getDepartment() . " exam",
-                    $row['access_code'], $row['date_of_creation'], $row['exam_level'], $teacher, $questions);
+                $questions = $this->fetchAllExamQuestions($row[self::EXAM_ID]);
+                $teacher = $this->fetchTeacherByTeacherId($row[self::TEACHER_ID]);
+                $exams[] = new Exam($row[self::EXAM_ID], $teacher->getDepartment() . " exam",
+                    $row[self::ACCESS_CODE], $row[self::DATE_OF_CREATION], $row[self::EXAM_LEVEL], $teacher, $questions);
             }
         } catch (PDOException $e) {
             $this->connection->rollBack();
@@ -396,6 +456,12 @@ class Database
         return null;
     }
 
+    function fetchStudentById($userId): ?Student
+    {
+        $user = $this->fetchUserById($userId);
+        return $this->fetchStudentFromUser($user);
+    }
+
     /**
      * @param User|null $user
      * @param $userId
@@ -456,6 +522,29 @@ class Database
         $user = $this->fetchUser($email, $password);
 
         return $this->fetchTeacherFromUser($user);
+    }
+
+    function fetchAttempt($attemptId): ?Attempt
+    {
+        try {
+            $sql = "SELECT * FROM attempt WHERE attempt_id=:attemptId";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindParam(":attemptId", $attemptId);
+            $stmt->execute();
+
+            if ($stmt->rowCount() != 1) {
+                return null;
+            } else {
+                $attempt = $stmt->fetch(PDO::FETCH_ASSOC);
+                return new Attempt($attempt[self::ATTEMPT_ID], $attempt[self::STUDENT_ID],
+                    $attempt[self::EXAM_ID], $attempt[self::TIMESTAMP], $attempt[self::RESULT_PERCENTAGE]);
+            }
+        } catch (PDOException $e) {
+            $this->connection->rollBack();
+            echo $e->getMessage();
+        }
+
+        return null;
     }
 
 }

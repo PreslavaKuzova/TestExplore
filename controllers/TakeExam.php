@@ -5,12 +5,16 @@ require_once 'models/dto/Answer.php';
 require_once 'models/dto/Exam.php';
 require_once 'models/dto/Question.php';
 require_once 'models/ExamResultCalculator.php';
+require_once('./models/Database.php');
 
 class TakeExam extends BaseController
 {
+    private $databaseConnection;
+
     public function __construct()
     {
         parent::__construct('views/take_exam.phtml');
+        $this->databaseConnection = Database::getInstance();
     }
 
     public function index()
@@ -32,30 +36,20 @@ class TakeExam extends BaseController
 
     public function submit()
     {
-        echo '<pre>';
-        print_r($_POST);
-        echo '</pre>';
-
         $examId = $_POST["exam-id"];
         $exam = $this->getExam($examId);
         $userScore = ExamResultCalculator::calculateResult($exam, $_POST);
-        //TODO Save attempt in database
-        header('Location: /AttemptDetails/index/' . $examId . '&' . 123); //TODO set attemptId
+        $attemptId = $this->databaseConnection->addAttempt($examId, $_SESSION['user_id'], $userScore);
+        if($attemptId != -1) {
+            header('Location: /AttemptDetails/index/' . $examId . '&' . $attemptId);
+        } else {
+            header('Location: /CustomError');
+        }
     }
 
     private function getExam($examId)
     {
-        //TODO Replace with database call
-        return new Exam("-1", "Test Exam of Mathematics", "asd", "2021-05-10", "5", "1", array(
-            new Question("1", "What is a*b?", "multiple", "-1", array(new Answer(1, "Rectangle", true), new Answer(2, "Square", false))),
-            new Question("2", "What is pi?", "multiple", "-1",array(new Answer(3, "3.14", true), new Answer(4, "22/7", false), new Answer(5, "a circle", false), new Answer(6, "yummmy", true))),
-            new Question("3", "Which is bigger: 2 on power of 3 or 3 on the power of 2?", "multiple", "-1",array(new Answer(7, "2^3", false), new Answer(8, "3 ^ 2", false), new Answer(9, "yo mamma", true), new Answer(10, "they are equal", false))),
-            new Question("4", "What is a*b?", "multiple", "-1",array(new Answer(331, "Rectangle", true), new Answer(221, "Square", false))),
-            new Question("5", "What is a*b?", "multiple", "-1",array(new Answer(332, "Rectangle", true), new Answer(222, "Square", false))),
-            new Question("6", "What is a*b?", "multiple", "-1",array(new Answer(333, "Rectangle", true), new Answer(223, "Square", false))),
-            new Question("7", "What is a*b?", "multiple", "-1",array(new Answer(334, "Rectangle", true), new Answer(224, "Square", false))),
-
-        ));
+        return $this->databaseConnection->fetchExamById($examId);
     }
 
     private function getFileContent($filename)
