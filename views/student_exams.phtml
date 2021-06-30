@@ -70,14 +70,50 @@
             echo "<td>" . $exam->getAccessCode() . "</td>";
             echo "<td>" . $exam->getDateOfCreation() . "</td>";
             echo "<td>" . $exam->getTeacher()->getFullName() . "</td>";
-            echo "<td> <form class='start-button' name='edit-exam' action='/TakeExam/' method='post'>
-                            <input type='hidden' value=" . $exam->id . " name='exam-id'>
-                            <input class='start-button-input' type='submit' value='Start' id='take-exam'>
-                       </form>
-                  </td>";
+            echo "<td> <button class='start-button start-button-input start-exam'  id='start-exam-" . $exam->id . "'>Start</button>  </td>";
             echo "</tr>";
         }
         ?>
     </table>
 
+    <!-- The Upload Modal -->
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form class='start-button' action='/TakeExam/' method='post'>
+                <input type='hidden' id="exam-id" name='exam-id'>
+                <label for="exam-access-code">Access Code (if any):</label>
+                <input id="exam-access-code" type='text' name='exam-access-code'>
+                <input class='start-button-input' type='submit' value='Start' id='take-exam'>
+        </div>
+
+    </div>
+
+    <script>
+        var modal = document.getElementById("myModal");
+        var btnList = document.getElementsByClassName("start-exam");
+        var span = document.getElementsByClassName("close")[0];
+
+        for (let i = 0; i < btnList.length; i++) {
+            btnList[i].onclick = function() {
+                modal.style.display = "block";
+                var btnId = btnList[i].id;
+                var examId = btnId.split("-")[2];
+                var hiddenLabel = document.getElementsByClassName("exam-id");
+                hiddenLabel.value = examId;
+            }
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 </main>
