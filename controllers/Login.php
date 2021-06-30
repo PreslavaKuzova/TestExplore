@@ -18,8 +18,7 @@ class Login extends BaseController
 
     public function index()
     {
-        $this->view->message = "";
-        $this->render();
+        $this->updateContent("");
     }
 
     public function teacherLogin()
@@ -32,12 +31,12 @@ class Login extends BaseController
         $this->login("student-email", "student-password", self::STUDENT);
     }
 
-    private function login($emailId, $passId, $userId) {
-        if($this->initSession($emailId, $passId, $userId)) {
+    private function login($emailId, $passId, $userId)
+    {
+        if ($this->initSession($emailId, $passId, $userId)) {
             header("Location:/Home");
         } else {
-            $this->view->message = "Login failed. Check your credentials and try again";
-            $this->render();
+            $this->updateContent("Login failed. Check your credentials and try again");
         }
     }
 
@@ -78,6 +77,12 @@ class Login extends BaseController
             }
         }
         return false;
+    }
+
+    private function updateContent($message): void
+    {
+        $this->view->message = $message;
+        $this->render();
     }
 
 }

@@ -2,8 +2,8 @@
 
 class Teacher extends User
 {
-    private $teacherId;
-    private $department;
+    public $teacherId;
+    public $department;
 
     public function __construct($userId, $teacherId, $email, $firstName, $lastName, $department)
     {
