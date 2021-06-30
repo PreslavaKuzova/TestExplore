@@ -4,6 +4,7 @@ require_once('./models/dto/User.php');
 require_once('./models/dto/Student.php');
 require_once('./models/dto/Teacher.php');
 require_once('./models/dto/Exam.php');
+require_once('./models/dto/Answer.php');
 
 class Database
 {
@@ -41,6 +42,7 @@ class Database
                 $pass,
                 array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
             );
+            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
@@ -126,12 +128,15 @@ class Database
 
     function addExamWithQuestions($exam)
     {
-        $insertedId = $this->addExam($exam->accessCode, $exam->teacher->teacherId, $exam->level);
-        if ($insertedId != self::INVALID_ID) {
+        $examId = $this->addExam($exam->accessCode, $exam->teacher->teacherId, $exam->level);
+        if ($examId != self::INVALID_ID) {
             foreach ($exam->questions as $question) {
-                echo "IN FOREACH <br>";
-                $this->addQuestion($question->questionContent, $question->questionType, $insertedId);
-                //TODO add answers
+                $questionId = $this->addQuestion($question->questionContent, $question->questionType, $examId);
+                if ($questionId != self::INVALID_ID) {
+                    foreach ($question->answers as $answer) {
+                        $this->addAnswer($answer->content, $answer->isCorrect, $questionId);
+                    }
+                }
             }
         }
     }
@@ -140,47 +145,64 @@ class Database
     {
         $insertedId = self::INVALID_ID;
         try {
-            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
             $this->connection->beginTransaction();
 
             $sql = "INSERT INTO exam(exam_id, access_code, teacher_id, exam_level)
                         VALUES(:examId, :accessCode, :teacherId, :examLevel)";
             $stmt = $this->connection->prepare($sql);
 
-            print_r($this->connection->errorInfo());
-            echo "<br> teacer_id: " . $teacherId . "<br>";
             if ($stmt->execute([
                 ':examId' => NULL, ':accessCode' => $accessCode,
                 ':teacherId' => $teacherId, ':examLevel' => $examLevel
             ])) {
-                echo "SUCCESS!!!";
                 $insertedId = $this->connection->lastInsertId();
             }
-            print_r($this->connection->errorInfo());
             $this->connection->commit();
-
-            print_r($this->connection->errorInfo());
         } catch (Exception $e) {
-            echo "BBB";
             $this->connection->rollBack();
             echo $e->getMessage();
         }
-        echo $insertedId;
         return $insertedId;
     }
 
     function addQuestion($questionContent, $questionType, $examId)
     {
+        $insertedId = self::INVALID_ID;
+
         try {
             $this->connection->beginTransaction();
 
             $sql = "INSERT INTO question(question_id, content, question_type, exam_id) 
                         VALUES(:questionId, :questionContent, :questionType, :examId)";
             $stmt = $this->connection->prepare($sql);
+
+            if ($stmt->execute([
+                ':questionId' => NULL, ':questionContent' => $questionContent, ':questionType' => $questionType, ':examId' => $examId
+            ])) {
+                $insertedId = $this->connection->lastInsertId();
+            }
+
+            $this->connection->commit();
+        } catch (PDOException $e) {
+            $this->connection->rollBack();
+            echo $e->getMessage();
+        }
+
+        return $insertedId;
+    }
+
+    function addAnswer($content, $isCorrect, $questionId)
+    {
+        try {
+            $this->connection->beginTransaction();
+
+            $sql = "INSERT INTO answer(answer_id, content, is_correct, question_id)  
+                        VALUES(:answerId, :content, :isCorrect, :questionId)";
+
+            $stmt = $this->connection->prepare($sql);
+
             $stmt->execute([
-                ':questionId' => NULL, ':content' => $questionContent, ':questionType' => $questionType, ':examId' => $examId
-            ]);
+                ':answerId' => NULL, ':content' => $content, ':isCorrect' => $isCorrect, ':questionId' => $questionId]);
 
             $this->connection->commit();
         } catch (PDOException $e) {
@@ -200,7 +222,9 @@ class Database
             $stmt->execute();
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $questions[] = new Question($row['question_id'], $row['content'], $row['question_type'], NULL);
+                $answers = $this->fetchAllQuestionsAnswers($row['question_id']);
+                $questions[] = new Question($row['question_id'], $row['content'], $row['question_type'], $row['exam_id'],
+                    $answers);
             }
         } catch (PDOException $e) {
             $this->connection->rollBack();
@@ -208,6 +232,27 @@ class Database
         }
 
         return $questions;
+    }
+
+    function fetchAllQuestionsAnswers($questionId): array
+    {
+        $answers = array();
+
+        try {
+            $sql = "SELECT * FROM answer WHERE question_id=:questionId";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindParam(":questionId", $questionId);
+            $stmt->execute();
+
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $answers[] = new Answer($row['content'], $row['is_correct']);
+            }
+        } catch (PDOException $e) {
+            $this->connection->rollBack();
+            echo $e->getMessage();
+        }
+
+        return $answers;
     }
 
     function fetchAllExams(): array

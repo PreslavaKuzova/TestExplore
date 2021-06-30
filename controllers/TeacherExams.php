@@ -46,12 +46,6 @@ class TeacherExams extends BaseController
             $jsonContent = fread($myFile, filesize($filePath));
             fclose($myFile);
 
-//            $exams = json_decode($jsonContent);
-//            //TODO replace this with database insert
-//            foreach ($exams->exams as $exam) {
-//                echo $exam->name . " " . $exam->accessCode . "<br>";
-//            }
-
             $exams = json_decode($jsonContent);
             foreach ($exams->exams as $exam) {
                 $this->databaseConnection->addExamWithQuestions($exam);
