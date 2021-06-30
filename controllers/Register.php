@@ -22,7 +22,7 @@ class Register extends BaseController
 
     public function index()
     {
-        $this->showMessage("");
+        $this->updateContent("");
     }
 
     public function studentRegistration()
@@ -37,13 +37,13 @@ class Register extends BaseController
                     if ($this->initSession($student)) {
                         header("Location:/Home");
                     } else {
-                        $this->showMessage("Something went wrong. We couldn't create an account. Please try again.");
+                        $this->updateContent("Something went wrong. We couldn't create an account. Please try again.");
                     }
                 } else {
-                    $this->showMessage("Something went wrong. We couldn't create an account. Please try again.");
+                    $this->updateContent("Something went wrong. We couldn't create an account. Please try again.");
                 }
             } else {
-                $this->showMessage("Passwords don't match.");
+                $this->updateContent("Passwords don't match.");
             }
         }
     }
@@ -62,7 +62,7 @@ class Register extends BaseController
         return false;
     }
 
-    private function showMessage($message): void
+    private function updateContent($message): void
     {
         $this->view->message = $message;
         $this->render();

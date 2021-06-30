@@ -18,9 +18,7 @@ class TeacherExams extends BaseController
 
     public function index()
     {
-        $this->view->message = "";
-        $this->view->exams = $this->getTeacherExams();
-        $this->render();
+        $this->updateContent("");
     }
 
     public function uploadJson()
@@ -51,6 +49,8 @@ class TeacherExams extends BaseController
                 $this->databaseConnection->addExamWithQuestions($exam);
             }
         }
+
+        $this->updateContent("");
     }
 
     public function downloadJson()
@@ -65,5 +65,12 @@ class TeacherExams extends BaseController
     private function getTeacherExams(): array
     {
         return $this->databaseConnection->fetchAllTeacherExams($_SESSION['teacher_id']);
+    }
+
+    private function updateContent($message): void
+    {
+        $this->view->message = $message;
+        $this->view->exams = $this->getTeacherExams();
+        $this->render();
     }
 }
