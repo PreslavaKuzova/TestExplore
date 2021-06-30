@@ -6,10 +6,8 @@
 
         <div class="float-first-child">
             <img src="../img/teacher.png" alt="teacher" width="100"/>
-            <form class="teacher-function-container" name="teacher" action="/uploadJson" method="post">
-                <input class="teacher-function" type="submit" value="Upload Json" id="upload-json">
-            </form>
-            <form class="teacher-function-container" name="teacher" action="/downloadJson" method="post">
+            <button class="teacher-function teacher-function-container" id="upload-modal">Upload Exams</button>
+            <form class="teacher-function-container" name="teacher" action="TeacherExams/downloadJson" method="post">
                 <input class="teacher-function" type="submit" value="Download All Exams" id="download-json">
             </form>
             <form class="teacher-function-container" name="teacher" action="/CreateExam" method="post">

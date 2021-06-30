@@ -1,17 +1,19 @@
-main{
+main {
     width: 100%;
-    background-color:  rgb(234, 244, 255);
+    background-color: rgb(234, 244, 255);
 }
+
 table {
     border: 1px solid gainsboro;
     border-collapse: collapse;
     width: 100%;
 }
+
 tr, td, th {
     border: 1px solid gainsboro;
     padding: 8px;
-    background-color: #B3DAFE;
 }
+
 th {
     padding-top: 12px;
     padding-bottom: 12px;
@@ -19,14 +21,21 @@ th {
     background-color: #175581;
     color: white;
 }
-h1{
+
+h1 {
     text-align: center;
     padding-top: 30px;
     padding-bottom: 20px;
     color: #175581;
 }
-tr:nth-child(even){background-color: #f2f2f2;}
-tr:hover {background-color: #ddd;}
+
+tr:nth-child(odd) {
+    background-color: #B3DAFE;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
 
 .float-container {
     border: 3px solid #fff;
@@ -47,7 +56,7 @@ tr:hover {background-color: #ddd;}
     padding: 20px;
 }
 
-.teacher-function{
+.teacher-function {
     background-color: #B3DAFE;
     width: 50%;
     margin-top: 30px;
@@ -56,24 +65,68 @@ tr:hover {background-color: #ddd;}
     font-weight: bold;
     color: #175581;
 }
-.teacher-function-container{
+
+#upload-modal {
+    display: block;
+}
+
+.teacher-function-container {
     margin: auto;
     text-align: center;
 }
-img{
+
+img {
     display: block;
     margin-left: auto;
     margin-right: auto;
 }
 
-.edit-button{
+.edit-button {
     width: 80px;
     margin: auto;
 }
 
-.edit-button-input{
+.edit-button-input {
     width: 80px;
     background-color: #175581;
     color: #cccccc;
     font-weight: bold;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
