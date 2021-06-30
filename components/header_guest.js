@@ -23,7 +23,7 @@ headerTemplate.innerHTML = `
   </style>
   <header>
     <nav>
-        <a href="/Home"><img href="/Home" src="../img/logo_size_invert.jpg" alt="logo" /></a>
+        <a href="/Home"><img href="/Home" src="/img/logo_size_invert.jpg" alt="logo" /></a>
         <div class="nav-content">
             <a href="/Home">Introduction</a>
             <a href="/Register">Register</a>
