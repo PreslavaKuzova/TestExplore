@@ -5,6 +5,7 @@ $requestParts = explode('/', rtrim($requestUrl, '/'));
 $controllerName = count($requestParts) > 1 ? ucfirst($requestParts[1]) : "Home";
 $controllerFileName = "controllers/" . $controllerName . ".php";
 $methodName = count($requestParts) > 2 ? $requestParts[2] : "index";
+$params = count($requestParts) > 3 ? explode('&', $requestParts[3]) : null;
 
 if (!file_exists($controllerFileName)) {
     $controllerName = "CustomError";
@@ -13,7 +14,11 @@ if (!file_exists($controllerFileName)) {
 
 require_once $controllerFileName;
 $controller = new $controllerName;
-$controller->$methodName();
+if($params == null) {
+    $controller->$methodName();
+} else {
+    $controller->$methodName($params);
+}
 
 //TODO Check https://github.com/phprouter/main for a better example
 // https://www.youtube.com/watch?v=6HJXR4G_szo&ab_channel=StoyanCheresharov
