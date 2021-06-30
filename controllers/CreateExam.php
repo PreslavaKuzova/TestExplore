@@ -4,12 +4,17 @@ require_once 'controllers/BaseController.php';
 require_once 'models/dto/Answer.php';
 require_once 'models/dto/Exam.php';
 require_once 'models/dto/Question.php';
+require_once('./models/Database.php');
 
 class CreateExam extends BaseController
 {
+
+    private $databaseConnection;
+
     public function __construct()
     {
         parent::__construct('views/create_exam.phtml');
+        $this->databaseConnection = Database::getInstance();
     }
 
     public function index()
@@ -22,12 +27,8 @@ class CreateExam extends BaseController
         $this->render();
     }
 
-    public function save() {
-        //TODO Remove this when done debugging
-        echo '<pre>';
-        print_r($_POST);
-        echo '</pre>';
-
+    public function save()
+    {
         $examName = $_POST["exam-name"];
         $accessCode = $_POST["access-code"];
         $examLevel = $_POST["exam-level"];
@@ -37,7 +38,7 @@ class CreateExam extends BaseController
         $questionIndex = 1;
 
         while (true) {
-            if(isset($_POST["question-title-" . $questionIndex])) {
+            if (isset($_POST["question-title-" . $questionIndex])) {
                 $content = $_POST["question-title-" . $questionIndex];
                 $answerIndex = 1;
                 $answers = array();
@@ -51,16 +52,18 @@ class CreateExam extends BaseController
                         break;
                     }
                 }
-                $questions[] = new Question($questionIndex, $content, "multiple", $answers);
+                $questions[] = new Question($questionIndex, $content, "multiple", null, $answers);
                 $questionIndex++;
             } else {
                 break;
             }
         }
 
-        $exam = new Exam(1, $examName, $accessCode, $date, $examLevel, $teacherId, $questions);
+        $teacher = $this->databaseConnection->fetchTeacherByTeacherId($teacherId);
 
-        //TODO Replace this with database insert
-        echo json_encode($exam);
+        $exam = new Exam(null, $examName, $accessCode, $date, $examLevel, $teacher, $questions);
+        $this->databaseConnection->addExamWithQuestions($exam);
+
+        header('Location: /TeacherExams');
     }
 }
