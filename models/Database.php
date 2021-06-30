@@ -245,7 +245,7 @@ class Database
             $stmt->execute();
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $answers[] = new Answer($row['content'], $row['is_correct']);
+                $answers[] = new Answer($row['answer_id'], $row['content'], $row['is_correct']);
             }
         } catch (PDOException $e) {
             $this->connection->rollBack();
@@ -267,7 +267,7 @@ class Database
                 $teacher = $this->fetchTeacherByTeacherId($row['teacher_id']);
                 $questions = $this->fetchAllExamQuestions($row['exam_id']);
                 $exams[] = new Exam($row['exam_id'], $teacher->getDepartment() . ' Exam',
-                    $row['access_code'], $row['date_of_creation'], $row['level'], $teacher, $questions);
+                    $row['access_code'], $row['date_of_creation'], $row['exam_level'], $teacher, $questions);
             }
         } catch (PDOException $e) {
             $this->connection->rollBack();
