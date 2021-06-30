@@ -5,7 +5,7 @@
         <h3><?php echo $this->examDate ?></h3>
 
         <form action="/TakeExam/submit" method="post" style='width:900px'>
-            <input type="hidden" value=<?php echo $this->examId ?> name="exam_id" />
+            <input type="hidden" value=<?php echo $this->examId ?> name="exam-id" />
             <div id="questions">
                 <?php echo $this->examQuestions ?>
             </div>
