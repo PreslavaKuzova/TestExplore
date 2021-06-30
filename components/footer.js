@@ -36,14 +36,13 @@ footerTemplate.innerHTML = `
     .social-row li a {
       margin: 0 15px;
     }
+    .system{
+      font-weight: bold;
+      margin-left: 40px;
+    }
   </style>
   <footer>
-    <ul>
-    <a href="index.html">Introduction</a>
-    <a href="tests.html">Exams</a>
-    <a href="/Register">Register</a>
-    <a href="/Login">Login</a>
-    </ul>
+    <p class="system">TestExplore 2021</p>
     <ul class="social-row">
       <li><a href="#"><i class="fab fa-github"></i></a></li>
       <li><a href="#"><i class="fab fa-twitter"></i></a></li>

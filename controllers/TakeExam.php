@@ -15,7 +15,7 @@ class TakeExam extends BaseController
 
     public function index()
     {
-        $examId = -1; //$_POST["exam-id"]; //TODO Make a check if exists
+        $examId = $_POST["exam-id"];
         $exam = $this->getExam($examId);
         $this->view->examId = $examId;
         $this->view->examName = $exam->getName();
@@ -26,6 +26,10 @@ class TakeExam extends BaseController
 
     public function submit()
     {
+        echo '<pre>';
+        print_r($_POST);
+        echo '</pre>';
+
         $examId = $_POST["exam-id"];
         $exam = $this->getExam($examId);
         $userScore = ExamResultCalculator::calculateResult($exam, $_POST);
@@ -44,6 +48,7 @@ class TakeExam extends BaseController
             new Question("5","What is a*b?", "multiple", array(new Answer(332, "Rectangle", true), new Answer(222, "Square", false))),
             new Question("6","What is a*b?", "multiple", array(new Answer(333, "Rectangle", true), new Answer(223, "Square", false))),
             new Question("7","What is a*b?", "multiple", array(new Answer(334, "Rectangle", true), new Answer(224, "Square", false))),
+
         ));
     }
 
