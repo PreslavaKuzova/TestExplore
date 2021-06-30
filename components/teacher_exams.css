@@ -1,24 +1,97 @@
-#loader {
-    padding-top: 100px;
+main {
+    width: 100%;
+    background-color: rgb(234, 244, 255);
 }
+
 table {
     border: 1px solid gainsboro;
     border-collapse: collapse;
     width: 100%;
 }
+
 tr, td, th {
     border: 1px solid gainsboro;
     padding: 8px;
 }
+
 th {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;
-    background-color: #04AA6D;
+    background-color: #175581;
     color: white;
 }
-tr:nth-child(even){background-color: #f2f2f2;}
-tr:hover {background-color: #ddd;}
+
+h1 {
+    text-align: center;
+    padding-top: 30px;
+    padding-bottom: 20px;
+    color: #175581;
+}
+
+tr:nth-child(odd) {
+    background-color: #B3DAFE;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+.float-container {
+    border: 3px solid #fff;
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+}
+
+.float-first-child {
+    width: 30%;
+    margin: auto;
+}
+
+.float-second-child {
+    width: 70%;
+    float: left;
+    padding: 20px;
+}
+
+.teacher-function {
+    background-color: #B3DAFE;
+    width: 50%;
+    margin-top: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-weight: bold;
+    color: #175581;
+}
+
+#upload-modal {
+    display: block;
+}
+
+.teacher-function-container {
+    margin: auto;
+    text-align: center;
+}
+
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.edit-button {
+    width: 80px;
+    margin: auto;
+}
+
+.edit-button-input {
+    width: 80px;
+    background-color: #175581;
+    color: #cccccc;
+    font-weight: bold;
+}
 
 /* The Modal (background) */
 .modal {
@@ -30,8 +103,8 @@ tr:hover {background-color: #ddd;}
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
 /* Modal Content/Box */

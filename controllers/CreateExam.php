@@ -45,20 +45,20 @@ class CreateExam extends BaseController
                     if (isset($_POST["answer-" . $questionIndex . "-" . $answerIndex])) {
                         $ans = $_POST["answer-" . $questionIndex . "-" . $answerIndex];
                         $cor = isset($_POST["correct-" . $questionIndex . "-" . $answerIndex]);
-                        $answers[] = new Answer($ans, $cor);
+                        $answers[] = new Answer($answerIndex, $ans, $cor);
                         $answerIndex++;
                     } else {
                         break;
                     }
                 }
-                $questions[] = new Question($content, "multiple", $answers);
+                $questions[] = new Question($questionIndex, $content, "multiple", $answers);
                 $questionIndex++;
             } else {
                 break;
             }
         }
 
-        $exam = new Exam($examName, $accessCode, $date, $examLevel, $teacherId, $questions);
+        $exam = new Exam(1, $examName, $accessCode, $date, $examLevel, $teacherId, $questions);
 
         //TODO Replace this with database insert
         echo json_encode($exam);

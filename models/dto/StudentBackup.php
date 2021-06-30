@@ -1,5 +1,6 @@
 <?php
 
+
 class Student extends User
 {
     private $studentId;
