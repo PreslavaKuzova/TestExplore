@@ -39,7 +39,7 @@ class TakeExam extends BaseController
         $examId = $_POST["exam-id"];
         $exam = $this->getExam($examId);
         $userScore = ExamResultCalculator::calculateResult($exam, $_POST);
-        $attemptId = $this->databaseConnection->addAttempt($examId, $_SESSION['user_id'], $userScore);
+        $attemptId = $this->databaseConnection->addAttempt($_SESSION['student_id'], $examId, $userScore);
         if($attemptId != -1) {
             header('Location: /AttemptDetails/index/' . $examId . '&' . $attemptId);
         } else {

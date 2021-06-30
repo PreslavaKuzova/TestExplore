@@ -4,7 +4,7 @@
         <h1><?php echo $this->message ?></h1>
         <h3><?php echo $this->examDate ?></h3>
 
-        <p><?php echo $this->student ?>,</p>
+        <p><?php echo $this->student->getFirstName() . " " . $this->student->getLastName() ?>,</p>
         <p>Your score is</p>
         <p class="big-accent"><?php echo $this->result ?> %</p>
     </div>

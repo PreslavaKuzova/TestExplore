@@ -28,7 +28,7 @@ class AttemptDetails extends BaseController
         $this->view->examDate = "";
         $this->view->student = "";
         $this->view->result = "";
-        if ($this->userId != $exam->teacher && $this->userId != $attempt->getStudentId()) {
+        if ($this->userId != $exam->teacher && $_SESSION['student_id'] != $attempt->getStudentId()) {
             $this->view->message = "Unauthorized access. You are not the teacher nor the student for this exam. You cannot view the results.";
         } else {
             $this->view->message = $exam->name;
