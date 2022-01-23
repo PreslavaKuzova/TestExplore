@@ -36,7 +36,7 @@ class Database
                 "$dbtype:host=$host;dbname=$dbname",
                 $username,
                 $pass,
-                array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
+                array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
             );
         } catch (PDOException $e) {
             echo $e->getMessage();

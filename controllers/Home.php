@@ -8,7 +8,7 @@ class Home extends BaseController
     public function __construct()
     {
         parent::__construct();
-        parent::requestSession();
+//        parent::requestSession();
     }
 
     public function index()
