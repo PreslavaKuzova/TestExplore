@@ -60,7 +60,9 @@ class CreateExam extends BaseController
             }
         }
 
-        $exam = new Exam(null, $examName, $accessCode, $date, $examLevel, $teacherId, $questions);
+        $teacher = $this->databaseConnection->fetchTeacherByTeacherId($teacherId);
+        echo $teacher->teacherId;
+        $exam = new Exam(null, $examName, $accessCode, $date, $examLevel, $teacher, $questions);
         $this->databaseConnection->addExamWithQuestions($exam);
         header('Location: /TeacherExams');
     }

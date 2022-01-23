@@ -29,10 +29,10 @@
     <script>
 
         var questionCount = 0;
-        window.onload = function() {
+        window.onload = function () {
             var newQuestionButton = document.getElementById("new-question");
 
-            newQuestionButton.onclick = function() {
+            newQuestionButton.onclick = function () {
                 addQuestion();
             }
             addQuestion();
@@ -41,6 +41,7 @@
         function addQuestion() {
             var questionsContainer = document.getElementById("questions");
             var answerCount = 1;
+
             fetch('views/question_view.html')
                 .then(response => response.text())
                 .then((data) => {
@@ -59,7 +60,7 @@
         }
 
         function addAnswer(questionCount, answerCount) {
-            var answersContainer = document.getElementById("answers-"+questionCount);
+            var answersContainer = document.getElementById("answers-" + questionCount);
             fetch('views/answer_view.html')
                 .then(response => response.text())
                 .then((data) => {
