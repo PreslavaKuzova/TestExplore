@@ -8,7 +8,7 @@ class Exam
     public $accessCode;
     public $dateOfCreation;
     public $level;
-    public $teacher;
+    public $teacherId;
     public $questions;
 
     function __construct($id, $name, $accessCode, $dateOfCreation, $level, $teacher, $questions)
@@ -18,7 +18,7 @@ class Exam
         $this->accessCode = $accessCode;
         $this->dateOfCreation = $dateOfCreation;
         $this->level = $level;
-        $this->teacher = $teacher;
+        $this->teacherId = $teacher;
         $this->questions = $questions;
     }
 
@@ -47,9 +47,9 @@ class Exam
         return $this->level;
     }
 
-    function getTeacher()
+    function getTeacherId()
     {
-        return $this->teacher;
+        return $this->teacherId;
     }
 
     function getQuestions()

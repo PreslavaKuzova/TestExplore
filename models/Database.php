@@ -128,7 +128,7 @@ class Database
 
     function addExamWithQuestions($exam)
     {
-        $examId = $this->addExam($exam->accessCode, $exam->teacher->teacherId, $exam->level);
+        $examId = $this->addExam($exam->accessCode, $exam->teacherId, $exam->level);
         if ($examId != self::INVALID_ID) {
             foreach ($exam->questions as $question) {
                 $questionId = $this->addQuestion($question->questionContent, $question->questionType, $examId);
