@@ -427,7 +427,7 @@ class Database
         return null;
     }
 
-    private function fetchTeacherByTeacherId($teacherId): ?Teacher
+    public function fetchTeacherByTeacherId($teacherId): ?Teacher
     {
         try {
             $sql = "SELECT * FROM teacher WHERE teacher_id=:teacherId";

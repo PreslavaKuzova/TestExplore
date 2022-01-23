@@ -11,14 +11,14 @@ class Exam
     public $teacherId;
     public $questions;
 
-    function __construct($id, $name, $accessCode, $dateOfCreation, $level, $teacher, $questions)
+    function __construct($id, $name, $accessCode, $dateOfCreation, $level, $teacherId, $questions)
     {
         $this->id = $id;
         $this->name = $name;
         $this->accessCode = $accessCode;
         $this->dateOfCreation = $dateOfCreation;
         $this->level = $level;
-        $this->teacherId = $teacher;
+        $this->teacherId = $teacherId;
         $this->questions = $questions;
     }
 

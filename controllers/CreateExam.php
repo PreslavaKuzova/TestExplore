@@ -28,11 +28,6 @@ class CreateExam extends BaseController
 
     public function save()
     {
-        //TODO Remove this when done debugging
-        echo '<pre>';
-        print_r($_POST);
-        echo '</pre>';
-
         $examName = $_POST["exam-name"];
         $accessCode = $_POST["access-code"];
         $examLevel = $_POST["exam-level"];
@@ -56,15 +51,17 @@ class CreateExam extends BaseController
                         break;
                     }
                 }
-                $questions[] = new Question($questionIndex, $content, "multiple", 1, $answers);
+
+                $questions[] = new Question($questionIndex, $content, "multiple", null, $answers);
+
                 $questionIndex++;
             } else {
                 break;
             }
         }
 
-        $exam = new Exam(1, $examName, $accessCode, $date, $examLevel, $teacherId, $questions);
-
+        $exam = new Exam(null, $examName, $accessCode, $date, $examLevel, $teacherId, $questions);
         $this->databaseConnection->addExamWithQuestions($exam);
+        header('Location: /TeacherExams');
     }
 }
