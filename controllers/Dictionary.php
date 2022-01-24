@@ -57,16 +57,20 @@ class Dictionary extends BaseController
 
     private function decodeResponse($response)
     {
-        $wordDefinition = json_decode($response)[0];
-        $word = $wordDefinition->word;
-        $partOfSpeech = $wordDefinition->meanings[0]->partOfSpeech;
-        $phonetic = $wordDefinition->phonetic;
-        $definition = $wordDefinition->meanings[0]->definitions[0]->definition;
-        $example = $wordDefinition->meanings[0]->definitions[0]->example;
-        $audio = $wordDefinition->phonetics[0]->audio;
+        try {
+            $wordDefinition = json_decode($response)[0];
+            $word = $wordDefinition->word;
+            $partOfSpeech = $wordDefinition->meanings[0]->partOfSpeech;
+            $phonetic = $wordDefinition->phonetic;
+            $definition = $wordDefinition->meanings[0]->definitions[0]->definition;
+            $example = $wordDefinition->meanings[0]->definitions[0]->example;
+            $audio = $wordDefinition->phonetics[0]->audio;
 
-        $data = array($word, $partOfSpeech, $phonetic, $definition, $example, $audio);
-        echo json_encode($data);
+            $data = array($word, $partOfSpeech, $phonetic, $definition, $example, $audio);
+            echo json_encode($data);
+        } catch (Exception $e) {
+            echo 'Message: ' .$e->getMessage();
+        }
     }
 
 }

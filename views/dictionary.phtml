@@ -26,9 +26,9 @@
                 data: data,
                 cache: false,
                 success: function (data) {
-                    alert(data)
-                    var array = JSON.parse(data);
-                    result.innerHTML = `
+                    try {
+                        var array = JSON.parse(data);
+                        result.innerHTML = `
   <div class="word">
     <h3>${array[0]}</h3>
     <button onclick="playSound()"> <i class="fas fa-volume-up"></i></button>
@@ -41,10 +41,13 @@
     ${array[3]}
   </p>
   <p class="word-example">${
-                        array[4] || ""
-                    }</p>
+                            array[4] || ""
+                        }</p>
   `;
-                    sound.setAttribute("src", `https:${array[5]}`);
+                        sound.setAttribute("src", `https:${array[5]}`);
+                    } catch (e) {
+                        result.innerHTML = `<h3 class="error">Couldn't Find The Word!</h3>`;
+                    }
                 }
             });
         })
