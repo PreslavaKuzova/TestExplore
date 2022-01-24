@@ -14,13 +14,14 @@ class Chat extends BaseController
     public function index()
     {
         $this->render();
+
     }
 
     public function messageSent()
     {
         $messages_buffer_file = 'messages.json';
         // Number of most recent messages kept in the buffer
-        $messages_buffer_size = 10;
+        $messages_buffer_size = 1000;
 
         if (isset($_POST['content']) and isset($_POST['name'])) {
             // Open, lock and read the message buffer file
