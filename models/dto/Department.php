@@ -17,7 +17,7 @@ class Department
         $this->departments = [self::LITERATURE, self::MATHEMATICS, self::GEOGRAPHY, self::HISTORY, self::SCIENCE];
     }
 
-    public static function getInstance(): ?Department
+    public static function getInstance()
     {
         if (self::$instance == null) {
             self::$instance = new Department();
@@ -26,7 +26,7 @@ class Department
         return self::$instance;
     }
 
-    public function getDepartments(): array
+    public function getDepartments()
     {
         return $this->departments;
     }

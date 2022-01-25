@@ -62,12 +62,12 @@ class TeacherExams extends BaseController
         echo $examsJson;
     }
 
-    private function getTeacherExams(): array
+    private function getTeacherExams()
     {
         return $this->databaseConnection->fetchAllTeacherExams($_SESSION['teacher_id']);
     }
 
-    private function updateContent($message): void
+    private function updateContent($message)
     {
         $this->view->message = $message;
         $this->view->exams = $this->getTeacherExams();

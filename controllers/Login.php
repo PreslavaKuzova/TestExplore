@@ -79,7 +79,7 @@ class Login extends BaseController
         return false;
     }
 
-    private function updateContent($message): void
+    private function updateContent($message)
     {
         $this->view->message = $message;
         $this->render();

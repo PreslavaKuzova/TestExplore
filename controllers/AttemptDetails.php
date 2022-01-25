@@ -35,7 +35,7 @@ class AttemptDetails extends BaseController
         } else {
             $this->view->message = $exam->name;
             $this->view->examDate = $exam->getDateOfCreation();
-            $this->view->student = $this->databaseConnection->fetchStudentById($_SESSION['user_id']);
+            $this->view->student = $this->databaseConnection->fetchStudentByStudentId($_SESSION['student_id']);
             $this->view->result = $attempt->getResult();
         }
 
