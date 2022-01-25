@@ -391,6 +391,16 @@ class Database
         return $this->fetchStudentFromUser($user);
     }
 
+    //TODO add real database call
+    function addAttempt($studentId, $examId, $userScore) {
+        return 0;
+    }
+
+    //TODO add real database call
+    function fetchAttempt($attemptId) {
+        return new Attempt(0, $_SESSION['student_id'], 0, "", 50);
+    }
+
     /**
      * @param User|null $user
      * @return Student|null
@@ -466,6 +476,30 @@ class Database
                 $user = $this->fetchUserById($teacher[self::USER_ID]);
                 return new Teacher($user->getUserId(), $teacher[self::TEACHER_ID], $user->getEmail(),
                     $user->getFirstName(), $user->getLastName(), $teacher[self::DEPARTMENT]);
+            }
+        } catch (PDOException $e) {
+            $this->connection->rollBack();
+            echo $e->getMessage();
+        }
+
+        return null;
+    }
+
+    public function fetchStudentByStudentId($studentId)
+    {
+        try {
+            $sql = "SELECT * FROM student WHERE student_id=:studentId";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindParam(":studentId", $studentId);
+            $stmt->execute();
+
+            if ($stmt->rowCount() != 1) {
+                return null;
+            } else {
+                $student = $stmt->fetch(PDO::FETCH_ASSOC);
+                $user = $this->fetchUserById($student[self::USER_ID]);
+                return new Student($user->getUserId(), $student[self::STUDENT_ID], $user->getEmail(),
+                    $user->getFirstName(), $user->getLastName(), $student[self::LEVEL]);
             }
         } catch (PDOException $e) {
             $this->connection->rollBack();
