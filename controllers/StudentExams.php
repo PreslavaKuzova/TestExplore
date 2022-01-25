@@ -28,7 +28,7 @@ class StudentExams extends BaseController
         $this->render();
     }
 
-    private function getAllSelectedSubjectFilters(): array
+    private function getAllSelectedSubjectFilters()
     {
         $subjects = array();
 
@@ -41,7 +41,7 @@ class StudentExams extends BaseController
         return $subjects;
     }
 
-    public function getAllFilteredBySubjectExams(): array
+    public function getAllFilteredBySubjectExams()
     {
         $filters = $this->getAllSelectedSubjectFilters();
 
@@ -53,7 +53,7 @@ class StudentExams extends BaseController
         return $exams;
     }
 
-    private function sortDependingOnSortByFilter($exams): array
+    private function sortDependingOnSortByFilter($exams)
     {
         if (isset($_POST['sort-control'])) {
             $choice = $_POST['sort-control'];

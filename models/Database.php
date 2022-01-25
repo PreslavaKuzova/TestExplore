@@ -48,7 +48,7 @@ class Database
         }
     }
 
-    public static function getInstance(): ?Database
+    public static function getInstance()
     {
         if (self::$instance == null) {
             self::$instance = new Database();
@@ -81,7 +81,7 @@ class Database
         return $insertedId;
     }
 
-    function addStudent($email, $firstName, $lastName, $password, $level): ?Student
+    function addStudent($email, $firstName, $lastName, $password, $level)
     {
         $insertedId = $this->addUser($email, $firstName, $lastName, $password);
         if ($insertedId != self::INVALID_ID) {
@@ -103,7 +103,7 @@ class Database
         return null;
     }
 
-    function addTeacher($email, $firstName, $lastName, $password, $department): ?Teacher
+    function addTeacher($email, $firstName, $lastName, $password, $department)
     {
         $insertedId = $this->addUser($email, $firstName, $lastName, $password);
         if ($insertedId != self::INVALID_ID) {
@@ -211,7 +211,31 @@ class Database
         }
     }
 
-    function fetchAllExamQuestions($examId): array
+    function fetchExamById($examId) {
+        try {
+            $sql = "SELECT * FROM exam WHERE exam_id=:examId";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindParam(":examId", $examId);
+            $stmt->execute();
+
+            if ($stmt->rowCount() != 1) {
+                return null;
+            } else {
+                $exam = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                $teacher = $this->fetchTeacherByTeacherId($exam['teacher_id']);
+                $questions = $this->fetchAllExamQuestions($exam['exam_id']);
+                return new Exam($exam['exam_id'], $teacher->getDepartment() . ' Exam',
+                    $exam['access_code'], $exam['date_of_creation'], $exam['exam_level'], $teacher, $questions);
+            }
+        } catch (PDOException $e) {
+            $this->connection->rollBack();
+            echo $e->getMessage();
+        }
+        return null;
+    }
+
+    function fetchAllExamQuestions($examId)
     {
         $questions = array();
 
@@ -234,7 +258,7 @@ class Database
         return $questions;
     }
 
-    function fetchAllQuestionsAnswers($questionId): array
+    function fetchAllQuestionsAnswers($questionId)
     {
         $answers = array();
 
@@ -255,7 +279,7 @@ class Database
         return $answers;
     }
 
-    function fetchAllExams(): array
+    function fetchAllExams()
     {
         $exams = array();
         try {
@@ -277,7 +301,7 @@ class Database
         return $exams;
     }
 
-    function fetchAllFilteredExams($subjectFilters): array
+    function fetchAllFilteredExams($subjectFilters)
     {
         $filteredExams = array();
 
@@ -292,7 +316,7 @@ class Database
         return $filteredExams;
     }
 
-    function fetchAllTeacherExams($teacherId): array
+    function fetchAllTeacherExams($teacherId)
     {
         $exams = array();
 
@@ -316,7 +340,7 @@ class Database
         return $exams;
     }
 
-    private function fetchUser($email, $password): ?User
+    private function fetchUser($email, $password)
     {
         try {
             $sql = "SELECT * FROM user WHERE email=:email AND password=:password";
@@ -339,7 +363,7 @@ class Database
         return null;
     }
 
-    private function fetchUserById($userId): ?User
+    private function fetchUserById($userId)
     {
         try {
             $sql = "SELECT * FROM user WHERE user_id=:userId";
@@ -361,7 +385,7 @@ class Database
         return null;
     }
 
-    function fetchStudent($email, $password): ?Student
+    function fetchStudent($email, $password)
     {
         $user = $this->fetchUser($email, $password);
         return $this->fetchStudentFromUser($user);
@@ -371,7 +395,7 @@ class Database
      * @param User|null $user
      * @return Student|null
      */
-    public function fetchStudentFromUser(?User $user): ?Student
+    public function fetchStudentFromUser(?User $user)
     {
         if ($user != null) {
             try {
@@ -402,7 +426,7 @@ class Database
      * @return Teacher|null
      */
 
-    public function fetchTeacherFromUser(?User $user): ?Teacher
+    public function fetchTeacherFromUser(?User $user)
     {
         if ($user != null) {
             try {
@@ -427,7 +451,7 @@ class Database
         return null;
     }
 
-    public function fetchTeacherByTeacherId($teacherId): ?Teacher
+    public function fetchTeacherByTeacherId($teacherId)
     {
         try {
             $sql = "SELECT * FROM teacher WHERE teacher_id=:teacherId";
@@ -451,7 +475,7 @@ class Database
         return null;
     }
 
-    function fetchTeacherByEmailAndPassword($email, $password): ?Teacher
+    function fetchTeacherByEmailAndPassword($email, $password)
     {
         $user = $this->fetchUser($email, $password);
 

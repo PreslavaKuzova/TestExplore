@@ -8,7 +8,7 @@ class ExamCollection
         $this->exams = $exams;
     }
 
-    public function getExams(): array
+    public function getExams()
     {
         return $this->exams;
     }
